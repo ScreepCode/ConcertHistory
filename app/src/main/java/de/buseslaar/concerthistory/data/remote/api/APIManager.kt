@@ -11,7 +11,6 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
@@ -34,7 +33,7 @@ class APIManager {
             url.protocol = URLProtocol.HTTPS
             url.encodedPath = "rest" + url.encodedPath
             contentType(ContentType.Application.Json)
-            header(HttpHeaders.Authorization, "Bearer ${BuildConfig.API_KEY}")
+            header("x-api-key", BuildConfig.API_KEY)
         }
 
         HttpResponseValidator {
