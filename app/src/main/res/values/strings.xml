@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Concert History</string>
+
+    <!-- Descriptions -->
+    <string name="desc_back">Navigate Back</string>
+
+    <!-- App Header -->
+    <string name="settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="settings_theme">Theme</string>
+    <string name="settings_dark_theme_header">Dark Theme</string>
+    <string name="settings_dark_theme_system">System Default</string>
+    <string name="settings_dark_theme_light">Light</string>
+    <string name="settings_dark_theme_dark">Dark</string>
+    <string name="settings_about_header">About</string>">
+    <string name="settings_about_text">About this App</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_setlist_header">Setlist Configuration</string>
+    <string name="settings_setlist_userid">Username</string>
+    <string name="settings_setlist_username_message">Please enter your Setlist.fm Username</string>
+
+
 </resources>
