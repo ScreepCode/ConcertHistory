@@ -83,4 +83,8 @@ android {
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+
+    // Settings
+    implementation(libs.compose.prefs3)
+    implementation(libs.androidx.datastore.preferences)
   }
