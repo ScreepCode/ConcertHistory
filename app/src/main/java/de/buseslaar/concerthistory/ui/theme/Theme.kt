@@ -5,10 +5,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.views.settings.SettingsViewModel
+
+enum class ThemeMode(
+    val value: String,
+) {
+    System("system"),
+    Light("light"),
+    Dark("dark"),
+}
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -37,19 +43,16 @@ fun ConcertHistoryTheme(
     content: @Composable () -> Unit
 ) {
     val viewModel = viewModel<SettingsViewModel>()
-    val theme by viewModel.theme.collectAsState(initial = "system")
+    val theme = viewModel.theme
 
     val colorScheme = when (theme) {
-        "system" -> when {
+        ThemeMode.System -> when {
             isSystemInDarkTheme() -> DarkColorScheme
             else -> LightColorScheme
         }
 
-        "light" -> LightColorScheme
-        "dark" -> DarkColorScheme
-        else -> {
-            LightColorScheme
-        }
+        ThemeMode.Light -> LightColorScheme
+        ThemeMode.Dark -> DarkColorScheme
     }
 
     MaterialTheme(

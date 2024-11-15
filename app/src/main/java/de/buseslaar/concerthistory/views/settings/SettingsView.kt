@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.datastore.core.DataStore
@@ -21,9 +22,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jamal.composeprefs3.ui.GroupHeader
 import com.jamal.composeprefs3.ui.PrefsScreen
 import com.jamal.composeprefs3.ui.prefs.DropDownPref
+import com.jamal.composeprefs3.ui.prefs.EditTextPref
 import com.jamal.composeprefs3.ui.prefs.TextPref
 import de.buseslaar.concerthistory.BuildConfig
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.ui.theme.ThemeMode
 
 // TODO: This should be a full screen dialog
 @Composable
@@ -31,7 +34,9 @@ fun SettingsView(
     onBack: () -> Unit
 ) {
     val settingsViewModel = viewModel<SettingsViewModel>()
-    val theme by settingsViewModel.theme.collectAsState(initial = "system")
+    val theme = settingsViewModel.theme
+    val setlistUsername by settingsViewModel.setlistUsername.collectAsState(initial = "")
+
     val dataStore = settingsViewModel.dataStore
 
     Scaffold(
@@ -43,20 +48,23 @@ fun SettingsView(
     ) { innerPadding ->
         SettingsScreenContent(
             dataStore = dataStore,
-            theme = theme,
-            onSaveTheme = { newTheme ->
-                settingsViewModel.saveTheme(newTheme)
-            },
+            theme = theme.value,
+            setlistUsername = setlistUsername,
+            themeKey = settingsViewModel.themeKey,
+            setlistUsernameKey = settingsViewModel.setlistUsernameKey,
             modifier = Modifier.padding(innerPadding)
         )
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingsScreenContent(
     dataStore: DataStore<Preferences>,
     theme: String,
-    onSaveTheme: (String) -> Unit,
+    setlistUsername: String,
+    themeKey: Preferences.Key<String>,
+    setlistUsernameKey: Preferences.Key<String>,
     modifier: Modifier = Modifier,
 ) {
     PrefsScreen(
@@ -73,19 +81,34 @@ fun SettingsScreenContent(
                 DropDownPref(
                     title = stringResource(R.string.settings_dark_theme_header),
                     useSelectedAsSummary = true,
-                    key = "theme",
+                    key = themeKey.toString(),
                     defaultValue = theme,
                     entries = mapOf(
-                        "system" to stringResource(R.string.settings_dark_theme_system),
-                        "light" to stringResource(R.string.settings_dark_theme_light),
-                        "dark" to stringResource(R.string.settings_dark_theme_dark)
+                        ThemeMode.System.value to "System Default",
+                        ThemeMode.Light.value to "Light",
+                        ThemeMode.Dark.value to "Dark"
                     ),
-                    onValueChange = { newValue ->
-                        onSaveTheme(newValue)
-                    },
                     dropdownBackgroundColor = MaterialTheme.colorScheme.background,
                 )
             }
+        }
+
+        prefsGroup({
+            GroupHeader(
+                title = stringResource(R.string.settings_setlist_header),
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }) {
+            prefsItem {
+                EditTextPref(
+                    key = setlistUsernameKey.toString(),
+                    title = stringResource(R.string.settings_setlist_userid),
+                    summary = setlistUsername,
+                    dialogTitle = stringResource(R.string.settings_setlist_userid),
+                    dialogMessage = stringResource(R.string.settings_setlist_username_message),
+                )
+            }
+
         }
 
         prefsGroup({
