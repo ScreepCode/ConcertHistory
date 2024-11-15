@@ -1,32 +1,47 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
     alias(libs.plugins.kotlin.serialization)
-
 }
 
+val localProperties = readProperties(file("$rootDir/local.properties"))
+
 fun readProperties(propertiesFile: File) = Properties().apply {
-    propertiesFile.inputStream().use { fis ->
-        load(fis)
+    if(propertiesFile.exists()){
+        propertiesFile.inputStream().use { fis ->
+                load(fis)
+        }
     }
+}
+
+fun generateVersion(
+    hotfix: Int = localProperties.getProperty("hotfix.id")?.toInt() ?: 0
+): String {
+    val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+    val date = Date()
+    return "${dateFormat.format(date)}.$hotfix"
 }
 
 android {
     namespace = "de.buseslaar.concerthistory"
     compileSdk = 35
 
-    val localProperties = readProperties(file("$rootDir/local.properties"))
+    val version = System.getenv("VERSION_CODE") ?: generateVersion()
 
     defaultConfig {
         applicationId = "de.buseslaar.concerthistory"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = version.replace(".", "").toInt()
+        versionName = version
+
+        setProperty("archivesBaseName", "concertHistory-$versionCode")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -34,7 +49,6 @@ android {
     }
 
     buildTypes {
-
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -42,7 +56,9 @@ android {
                 "proguard-rules.pro"
             )
         }
-
+        debug {
+            versionNameSuffix = "-debug"
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -57,7 +73,7 @@ android {
     }
 }
 
-  dependencies {
+dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -87,4 +103,4 @@ android {
     // Settings
     implementation(libs.compose.prefs3)
     implementation(libs.androidx.datastore.preferences)
-  }
+}

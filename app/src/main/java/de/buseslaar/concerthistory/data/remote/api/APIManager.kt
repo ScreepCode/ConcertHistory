@@ -16,7 +16,7 @@ import io.ktor.http.contentType
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import kotlin.coroutines.cancellation.CancellationException
+import java.util.concurrent.CancellationException
 
 class APIManager {
     var jsonHttpClient = HttpClient {
@@ -29,9 +29,9 @@ class APIManager {
         }
 
         defaultRequest {
-            url.host = "https://api.setlist.fm"
+            url.host = "api.setlist.fm"
             url.protocol = URLProtocol.HTTPS
-            url.encodedPath = "rest" + url.encodedPath
+            url.encodedPath = "/rest/1.0/" + url.encodedPath
             contentType(ContentType.Application.Json)
             header("x-api-key", BuildConfig.API_KEY)
         }
@@ -41,17 +41,21 @@ class APIManager {
         }
     }
 
-    private fun getCustomResponseValidator(responseValidator: HttpCallValidator.Config): HttpCallValidator.Config { responseValidator.handleResponseExceptionWithRequest { exception, _ ->
-        var exceptionResponseText =
-            exception.message ?: "Unknown Error occurred. Please contact your administrator."
-        if (exception is ClientRequestException) { //400 errors
-            val exceptionResponse = exception.response
-            exceptionResponseText = exceptionResponse.bodyAsText() }
-        else if (exception is ServerResponseException) { //500 errors
-            val exceptionResponse = exception.response
-            exceptionResponseText = exceptionResponse.bodyAsText() }
-        throw CancellationException(exceptionResponseText) }
-        return responseValidator }
+    private fun getCustomResponseValidator(responseValidator: HttpCallValidator.Config): HttpCallValidator.Config {
+        responseValidator.handleResponseExceptionWithRequest { exception, _ ->
+            var exceptionResponseText =
+                exception.message ?: "Unknown Error occurred. Please contact your administrator."
+            if (exception is ClientRequestException) { //400 errors
+                val exceptionResponse = exception.response
+                exceptionResponseText = exceptionResponse.bodyAsText()
+            } else if (exception is ServerResponseException) { //500 errors
+                val exceptionResponse = exception.response
+                exceptionResponseText = exceptionResponse.bodyAsText()
+            }
+            throw CancellationException(exceptionResponseText)
+        }
+        return responseValidator
+    }
 
 
 }
