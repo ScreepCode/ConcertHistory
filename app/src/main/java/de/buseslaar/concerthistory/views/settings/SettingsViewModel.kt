@@ -18,7 +18,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val setlistUsernameKey = stringPreferencesKey("setListUsername")
 
     val theme: ThemeMode = ThemeMode.valueOf(context.dataStore.data.map { preferences ->
-        preferences[themeKey] ?: ThemeMode.System.value
+        preferences[themeKey] ?: ThemeMode.SYSTEM.value
     }.toString())
 
     val setlistUsername: Flow<String> = dataStore.data.map { preferences ->

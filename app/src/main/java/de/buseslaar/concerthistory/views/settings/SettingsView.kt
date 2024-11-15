@@ -84,9 +84,9 @@ fun SettingsScreenContent(
                     key = themeKey.toString(),
                     defaultValue = theme,
                     entries = mapOf(
-                        ThemeMode.System.value to "System Default",
-                        ThemeMode.Light.value to "Light",
-                        ThemeMode.Dark.value to "Dark"
+                        ThemeMode.SYSTEM.value to "System Default",
+                        ThemeMode.LIGHT.value to "Light",
+                        ThemeMode.DARK.value to "Dark"
                     ),
                     dropdownBackgroundColor = MaterialTheme.colorScheme.background,
                 )

@@ -11,9 +11,9 @@ import de.buseslaar.concerthistory.views.settings.SettingsViewModel
 enum class ThemeMode(
     val value: String,
 ) {
-    System("system"),
-    Light("light"),
-    Dark("dark"),
+    SYSTEM("system"),
+    LIGHT("light"),
+    DARK("dark"),
 }
 
 private val DarkColorScheme = darkColorScheme(
@@ -46,13 +46,13 @@ fun ConcertHistoryTheme(
     val theme = viewModel.theme
 
     val colorScheme = when (theme) {
-        ThemeMode.System -> when {
+        ThemeMode.SYSTEM -> when {
             isSystemInDarkTheme() -> DarkColorScheme
             else -> LightColorScheme
         }
 
-        ThemeMode.Light -> LightColorScheme
-        ThemeMode.Dark -> DarkColorScheme
+        ThemeMode.LIGHT -> LightColorScheme
+        ThemeMode.DARK -> DarkColorScheme
     }
 
     MaterialTheme(
