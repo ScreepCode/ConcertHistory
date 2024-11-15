@@ -31,7 +31,7 @@ class APIManager {
         defaultRequest {
             url.host = "api.setlist.fm"
             url.protocol = URLProtocol.HTTPS
-            url.encodedPath = "/rest/" + url.encodedPath
+            url.encodedPath = "/rest/1.0/" + url.encodedPath
             contentType(ContentType.Application.Json)
             header("x-api-key", BuildConfig.API_KEY)
         }

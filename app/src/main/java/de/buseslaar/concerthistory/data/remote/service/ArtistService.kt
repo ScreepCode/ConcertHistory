@@ -23,7 +23,7 @@ class ArtistService {
      * @return ArtistsDto
      * */
     suspend fun searchArtist(name: String, sort: Sort = Sort.RELEVANCE): ArtistsDto {
-        return apiManger.jsonHttpClient.get("1.0/search/artists", {
+        return apiManger.jsonHttpClient.get("search/artists", {
             url {
                 parameters.append("artistName", name)
                 parameters.append("sort", sort.sort)
