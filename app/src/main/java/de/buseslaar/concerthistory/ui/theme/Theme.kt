@@ -5,9 +5,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.buseslaar.concerthistory.utils.extensions.findActivity
 import de.buseslaar.concerthistory.views.settings.SettingsViewModel
 
 enum class ThemeMode {
@@ -55,9 +59,25 @@ fun ConcertHistoryTheme(
         ThemeMode.DARK -> DarkColorScheme
     }
 
+    SetStatusBarStyle(
+        isColorSchemeLight = colorScheme == LightColorScheme
+    )
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
+}
+
+@Composable
+fun SetStatusBarStyle(isColorSchemeLight: Boolean) {
+    val view = LocalView.current
+    SideEffect {
+        val window = view.context.findActivity()?.window
+        val windowInsetsController = window?.let { WindowCompat.getInsetsController(it, view) }
+        if (windowInsetsController != null) {
+            windowInsetsController.isAppearanceLightStatusBars = isColorSchemeLight
+        }
+    }
 }
