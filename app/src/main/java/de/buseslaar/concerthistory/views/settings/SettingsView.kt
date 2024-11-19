@@ -34,7 +34,7 @@ fun SettingsView(
     onBack: () -> Unit
 ) {
     val settingsViewModel = viewModel<SettingsViewModel>()
-    val theme = settingsViewModel.theme
+    val theme by settingsViewModel.theme.collectAsState(initial = ThemeMode.SYSTEM)
     val setlistUsername by settingsViewModel.setlistUsername.collectAsState(initial = "")
 
     val dataStore = settingsViewModel.dataStore
@@ -48,7 +48,7 @@ fun SettingsView(
     ) { innerPadding ->
         SettingsScreenContent(
             dataStore = dataStore,
-            theme = theme.value,
+            theme = theme,
             setlistUsername = setlistUsername,
             themeKey = settingsViewModel.themeKey,
             setlistUsernameKey = settingsViewModel.setlistUsernameKey,
@@ -61,7 +61,7 @@ fun SettingsView(
 @Composable
 fun SettingsScreenContent(
     dataStore: DataStore<Preferences>,
-    theme: String,
+    theme: ThemeMode,
     setlistUsername: String,
     themeKey: Preferences.Key<String>,
     setlistUsernameKey: Preferences.Key<String>,
@@ -82,11 +82,11 @@ fun SettingsScreenContent(
                     title = stringResource(R.string.settings_dark_theme_header),
                     useSelectedAsSummary = true,
                     key = themeKey.toString(),
-                    defaultValue = theme,
+                    defaultValue = theme.toString(),
                     entries = mapOf(
-                        ThemeMode.SYSTEM.value to "System Default",
-                        ThemeMode.LIGHT.value to "Light",
-                        ThemeMode.DARK.value to "Dark"
+                        ThemeMode.SYSTEM.toString() to stringResource(R.string.settings_dark_theme_system),
+                        ThemeMode.LIGHT.toString() to stringResource(R.string.settings_dark_theme_light),
+                        ThemeMode.DARK.toString() to stringResource(R.string.settings_dark_theme_dark)
                     ),
                     dropdownBackgroundColor = MaterialTheme.colorScheme.background,
                 )
