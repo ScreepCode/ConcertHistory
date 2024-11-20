@@ -10,9 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 import de.buseslaar.concerthistory.utils.extensions.findActivity
-import de.buseslaar.concerthistory.views.settings.SettingsViewModel
 
 enum class ThemeMode {
     SYSTEM,
@@ -46,8 +45,8 @@ private val LightColorScheme = lightColorScheme(
 fun ConcertHistoryTheme(
     content: @Composable () -> Unit
 ) {
-    val viewModel = viewModel<SettingsViewModel>()
-    val theme by viewModel.theme.collectAsState(initial = ThemeMode.SYSTEM)
+    val dataStoreService = DataStoreServiceProvider.getInstance()
+    val theme by dataStoreService.theme.collectAsState(initial = ThemeMode.SYSTEM)
 
     val colorScheme = when (theme) {
         ThemeMode.SYSTEM -> when {
