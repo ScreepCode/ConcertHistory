@@ -24,10 +24,15 @@ class UserService {
      * Get the setlist of a user from the setlist.fm api
      *
      * @param userId the id of the user
-     * @return UserAttendedDto the setlists of the user
+     * @param page the page of the setlist
+     * @return UserAttendedDto up to 20 setlists of the user of the page requested via the parameter
      */
-    suspend fun getUserAttended(userId: String): UserAttendedDto {
-        return apiManager.jsonHttpClient.get("user/$userId/attended").body()
+    suspend fun getUserAttended(userId: String, page: Int? = 1): UserAttendedDto {
+        return apiManager.jsonHttpClient.get("user/$userId/attended", {
+            url {
+                parameters.append("p", page.toString())
+            }
+        }).body()
     }
 
 }
