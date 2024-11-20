@@ -1,11 +1,11 @@
 package de.buseslaar.concerthistory.views.dashboard
 
-import androidx.lifecycle.ViewModel
+import de.buseslaar.concerthistory.utils.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel : BaseViewModel() {
     private val _menuExpanded = MutableStateFlow(false)
     val menuExpanded: StateFlow<Boolean> = _menuExpanded.asStateFlow()
 
