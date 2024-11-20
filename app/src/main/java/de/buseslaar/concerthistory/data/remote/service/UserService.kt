@@ -10,10 +10,22 @@ class UserService {
 
     private val apiManager: APIManager = APIManager()
 
+    /**
+     * Get a user from the setlist.fm api
+     *
+     * @param userId the id of the user
+     * @return UserDto the user
+     */
     suspend fun getUser(userId: String): UserDto {
         return apiManager.jsonHttpClient.get("user/$userId").body()
     }
 
+    /**
+     * Get the setlist of a user from the setlist.fm api
+     *
+     * @param userId the id of the user
+     * @return UserAttendedDto the setlists of the user
+     */
     suspend fun getUserAttended(userId: String): UserAttendedDto {
         return apiManager.jsonHttpClient.get("user/$userId/attended").body()
     }
