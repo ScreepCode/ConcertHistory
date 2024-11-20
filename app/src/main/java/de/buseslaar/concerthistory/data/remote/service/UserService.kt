@@ -27,7 +27,7 @@ class UserService {
      * @param page the page of the setlist
      * @return UserAttendedDto up to 20 setlists of the user of the page requested via the parameter
      */
-    suspend fun getUserAttended(userId: String, page: Int? = 1): UserAttendedDto {
+    suspend fun getUserAttended(userId: String, page: Int = 1): UserAttendedDto {
         return apiManager.jsonHttpClient.get("user/$userId/attended", {
             url {
                 parameters.append("p", page.toString())
