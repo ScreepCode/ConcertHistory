@@ -37,8 +37,6 @@ fun SettingsView(
     val theme by settingsViewModel.theme.collectAsState(initial = ThemeMode.SYSTEM)
     val setlistUsername by settingsViewModel.setlistUsername.collectAsState(initial = "")
 
-    val dataStore = settingsViewModel.dataStore
-
     Scaffold(
         topBar = {
             SettingsAppBar(
@@ -47,7 +45,7 @@ fun SettingsView(
         }
     ) { innerPadding ->
         SettingsScreenContent(
-            dataStore = dataStore,
+            dataStore = settingsViewModel.dataStore,
             theme = theme,
             setlistUsername = setlistUsername,
             themeKey = settingsViewModel.themeKey,

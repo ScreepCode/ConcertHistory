@@ -1,28 +1,20 @@
 package de.buseslaar.concerthistory.views.settings
 
 import android.annotation.SuppressLint
-import android.app.Application
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.AndroidViewModel
-import de.buseslaar.concerthistory.dataStore
+import androidx.lifecycle.ViewModel
+import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 import de.buseslaar.concerthistory.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @SuppressLint("StaticFieldLeak")
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
-    val dataStore = context.dataStore
+class SettingsViewModel() : ViewModel() {
+    private val dataStoreService = DataStoreServiceProvider.getInstance()
 
-    val themeKey = stringPreferencesKey("theme")
-    val setlistUsernameKey = stringPreferencesKey("setListUsername")
+    val theme: Flow<ThemeMode> = dataStoreService.theme
+    val setlistUsername: Flow<String> = dataStoreService.setlistUsername
 
-    val theme: Flow<ThemeMode> = context.dataStore.data.map { preferences ->
-        ThemeMode.valueOf(preferences[themeKey] ?: ThemeMode.SYSTEM.toString())
-    }
-
-    val setlistUsername: Flow<String> = dataStore.data.map { preferences ->
-        preferences[setlistUsernameKey] ?: ""
-    }
+    val dataStore = dataStoreService.getDataStore()
+    val themeKey = dataStoreService.themeKey
+    val setlistUsernameKey = dataStoreService.setlistUsernameKey
 }
 
