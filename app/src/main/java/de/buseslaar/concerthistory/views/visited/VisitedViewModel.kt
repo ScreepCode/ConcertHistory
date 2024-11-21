@@ -25,7 +25,7 @@ class VisitedViewModel : BaseViewModel() {
                 throw Exception("Username is missing")
             }
             lastAttendedConcerts =
-                (userName?.let { userService.getUserAttended(it).setlist }
+                (userName?.let { userService.getUserAttended(it).setlists }
                     ?: emptyList()).toMutableList()
 
         }

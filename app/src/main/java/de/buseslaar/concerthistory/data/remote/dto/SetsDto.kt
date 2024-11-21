@@ -4,7 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ArtistsDto(
-    @SerialName("artist")
-    val artists: List<ArtistDto>
+data class SetsDto(
+    val name: String? = null,
+    val encore: Int? = 0,
+    @SerialName("song")
+    val songs: List<SongDto>
 )
