@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -57,7 +58,9 @@ fun MainView(
                     },
                     icon = {
                         Icon(
-                            imageVector = if (isSelected) item.activeIcon else item.inactiveIcon,
+                            painter = if (isSelected) painterResource(item.activeIcon) else painterResource(
+                                item.inactiveIcon
+                            ),
                             contentDescription = item.toString(),
                             modifier = Modifier.size(32.dp) // 24.dp is default size
                         )
