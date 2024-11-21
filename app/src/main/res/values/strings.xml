@@ -8,6 +8,7 @@
 
     <!-- App Header -->
     <string name="settings">Settings</string>
+    <string name="visited_concerts">Visited Concerts</string>">
 
     <!-- Settings -->
     <string name="settings_theme">Theme</string>
