@@ -21,7 +21,9 @@ import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 
 @Composable
-fun VisitedView() {
+fun VisitedView(
+    onShowDetails: (String) -> Unit
+) {
     val viewModel = viewModel<VisitedViewModel>()
 
     if (viewModel.isLoading) {
@@ -38,7 +40,7 @@ fun VisitedView() {
         VisitedContent(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
-            onRowClick = { /* TODO */ },
+            onShowDetails = onShowDetails,
             onLikeClick = { /* TODO */ },
             modifier = Modifier.padding(innerPadding)
         )
@@ -49,7 +51,7 @@ fun VisitedView() {
 fun VisitedContent(
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
-    onRowClick: () -> Unit,
+    onShowDetails: (String) -> Unit,
     onLikeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +63,7 @@ fun VisitedContent(
             itemsIndexed(lastAttendedConcerts) { _, concert ->
                 ConcertPreview(
                     concert = concert,
-                    onRowClick = onRowClick,
+                    onRowClick = { onShowDetails(concert.id) },
                     onLikeClick = onLikeClick
                 )
             }

@@ -35,7 +35,7 @@ import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 
 @Composable
-fun DashboardView(onSettings: () -> Unit) {
+fun DashboardView(onSettings: () -> Unit, onShowDetails: (String) -> Unit) {
     val viewModel = viewModel<DashboardViewModel>()
     val menuExpanded by viewModel.menuExpanded.collectAsState()
 
@@ -57,6 +57,7 @@ fun DashboardView(onSettings: () -> Unit) {
         DashboardContent(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
+            onShowDetails = onShowDetails,
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp)
@@ -68,6 +69,7 @@ fun DashboardView(onSettings: () -> Unit) {
 fun DashboardContent(
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
+    onShowDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (isUserNameProvided) {
@@ -79,7 +81,7 @@ fun DashboardContent(
             LastAttendedConcertsPreview(
                 lastAttendedConcerts = lastAttendedConcerts,
                 onClickMore = {},
-                onClickDetails = {},
+                onClickDetails = onShowDetails,
             )
             FavoriteConcertsPreview()
         }
@@ -110,7 +112,7 @@ private fun Overview() {
 private fun LastAttendedConcertsPreview(
     lastAttendedConcerts: List<SetListDto>,
     onClickMore: () -> Unit,
-    onClickDetails: () -> Unit
+    onClickDetails: (String) -> Unit
 ) {
     ElevatedCard {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -129,7 +131,7 @@ private fun LastAttendedConcertsPreview(
                 )
             }
             lastAttendedConcerts.take(3).forEach { concert ->
-                ConcertPreview(concert = concert, onRowClick = onClickDetails)
+                ConcertPreview(concert = concert, onRowClick = { onClickDetails(concert.id) })
             }
         }
     }
