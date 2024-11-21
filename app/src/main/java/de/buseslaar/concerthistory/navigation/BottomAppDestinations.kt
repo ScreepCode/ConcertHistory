@@ -1,16 +1,13 @@
 package de.buseslaar.concerthistory.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.ui.graphics.vector.ImageVector
+import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.views.dashboard.DashboardRoot
 
 enum class BottomAppDestinations(
     val route: Any,
     val label: String,
-    val activeIcon: ImageVector,
-    val inactiveIcon: ImageVector
+    val activeIcon: Int,
+    val inactiveIcon: Int
 ) {
-    BottomDashboard(DashboardRoot, "Dashboard", Icons.Filled.Home, Icons.Outlined.Home),
+    BottomDashboard(DashboardRoot, "Dashboard", R.drawable.home_filled, R.drawable.home_outline),
 }
