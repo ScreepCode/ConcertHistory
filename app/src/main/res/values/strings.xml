@@ -9,6 +9,7 @@
     <!-- App Header -->
     <string name="settings">Settings</string>
     <string name="visited_concerts">Visited Concerts</string>">
+    <string name="setlist_details">Concerts Details</string>">
 
     <!-- Settings -->
     <string name="settings_theme">Theme</string>
@@ -33,4 +34,7 @@
     <!-- Liked -->
     <string name="isLiked">Liked</string>
     <string name="isNotLiked">Not Liked</string>
+    <string name="setlist_details_view_on_setlistfm">View on Setlist.fm</string>
+    <string name="desc_info">More Information</string>
+    <string name="setlist_details_encore">Encore</string>
 </resources>

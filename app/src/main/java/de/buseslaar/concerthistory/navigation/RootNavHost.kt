@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import de.buseslaar.concerthistory.views.dashboard.DashboardRoot
 import de.buseslaar.concerthistory.views.dashboard.addDashboardNavGraph
+import de.buseslaar.concerthistory.views.setlistDetails.addSetlistDetailsNavGraph
 import de.buseslaar.concerthistory.views.settings.addSettingsNavGraph
 import de.buseslaar.concerthistory.views.visited.addVisitedNavGraph
 
@@ -23,5 +24,6 @@ fun ConcertHistoryNavHost(navController: NavHostController, modifier: Modifier =
         addDashboardNavGraph(navController)
         addSettingsNavGraph(navController)
         addVisitedNavGraph(navController)
+        addSetlistDetailsNavGraph(navController)
     }
 }
