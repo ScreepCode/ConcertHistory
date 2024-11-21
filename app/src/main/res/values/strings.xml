@@ -29,4 +29,7 @@
     <string name="overview_favourite_artists_header">Favourite Artists</string>
     <string name="overview_more_menu_settings">Open Settings</string>
 
+    <!-- Liked -->
+    <string name="isLiked">Liked</string>
+    <string name="isNotLiked">Not Liked</string>
 </resources>
