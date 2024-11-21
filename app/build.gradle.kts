@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 val localProperties = readProperties(file("$rootDir/local.properties"))
@@ -103,4 +104,12 @@ dependencies {
     // Settings
     implementation(libs.compose.prefs3)
     implementation(libs.androidx.datastore.preferences)
+
+    // Room
+    implementation(libs.room)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
+    implementation(libs.coroutines)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }
