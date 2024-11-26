@@ -22,18 +22,18 @@ class SetlistService {
     suspend fun searchSetlist(
         name: String,
         page: Int = 1,
-        city: String?,
-        venue: String?
+        city: String = "",
+        venue: String = ""
     ): SetSearchDto {
         return apiManger.jsonHttpClient.get("search/setlists", {
             url {
                 parameters.append("artistName", name)
                 parameters.append("p", page.toString())
 
-                if (city != null && city.isNotEmpty()) {
+                if (city.isNotBlank()) {
                     parameters.append("city", city)
                 }
-                if (venue != null && venue.isNotEmpty()) {
+                if (venue.isNotBlank()) {
                     parameters.append("venueName", venue)
                 }
             }
