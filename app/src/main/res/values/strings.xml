@@ -37,4 +37,7 @@
     <string name="setlist_details_view_on_setlistfm">View on Setlist.fm</string>
     <string name="desc_info">More Information</string>
     <string name="setlist_details_encore">Encore</string>
+    <string name="search">Search</string>
+    <string name="artists">Artists</string>
+    <string name="concerts">Concerts</string>
 </resources>
