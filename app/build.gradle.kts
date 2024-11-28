@@ -115,4 +115,7 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.coroutines)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Splashscreen
+    implementation(libs.androidx.core.splashscreen)
 }
