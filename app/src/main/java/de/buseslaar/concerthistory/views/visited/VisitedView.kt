@@ -70,11 +70,25 @@ fun VisitedContent(
             modifier = modifier
         ) {
             itemsIndexed(lastAttendedConcerts) { _, concert ->
-                ConcertPreview(
-                    concert = concert,
-                    onRowClick = { onShowDetails(concert.id) },
-                    onLikeClick = onLikeClick
-                )
+                val isLiked = favorites.any { it.id == concert.id }
+
+                with(concert) {
+                    ConcertPreview(
+                        artistName = artist.name,
+                        venueName = venue.name,
+                        venueCity = venue.city.name,
+                        eventDate = eventDate,
+                        onRowClick = { onShowDetails(concert.id) },
+                        isLiked = isLiked,
+                        onLikeClick = {
+                            if (!isLiked) {
+                                onLikeClick(concert)
+                            } else {
+                                onDislikeClick(concert)
+                            }
+                        }
+                    )
+                }
             }
         }
     } else {

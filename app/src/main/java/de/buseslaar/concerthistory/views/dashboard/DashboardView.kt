@@ -131,7 +131,15 @@ private fun LastAttendedConcertsPreview(
                 )
             }
             lastAttendedConcerts.take(3).forEach { concert ->
-                ConcertPreview(concert = concert, onRowClick = { onClickDetails(concert.id) })
+                with(concert) {
+                    ConcertPreview(
+                        artistName = artist.name,
+                        venueName = venue.name,
+                        venueCity = venue.city.name,
+                        eventDate = eventDate,
+                        onRowClick = { onClickDetails(concert.id) }
+                    )
+                }
             }
         }
     }
