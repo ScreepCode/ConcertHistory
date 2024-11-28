@@ -10,21 +10,21 @@ import de.buseslaar.concerthistory.data.database.entity.Artist
 import de.buseslaar.concerthistory.data.database.entity.Setlist
 
 @Database(entities = [Artist::class, Setlist::class], version = 1, exportSchema = false)
-abstract class FavouritesDatabase : RoomDatabase() {
+abstract class FavoritesDatabase : RoomDatabase() {
     abstract val artistDao: ArtistDao
     abstract val setlistDao: SetlistDao
 
     companion object {
         @Volatile
-        private var INSTANCE: FavouritesDatabase? = null
-        fun getInstance(context: Context): FavouritesDatabase {
+        private var INSTANCE: FavoritesDatabase? = null
+        fun getInstance(context: Context): FavoritesDatabase {
             synchronized(this) {
                 var instance = INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        FavouritesDatabase::class.java,
-                        "favourites"
+                        FavoritesDatabase::class.java,
+                        "favorites"
                     ).fallbackToDestructiveMigration().build()
                 }
                 return instance
