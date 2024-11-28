@@ -14,7 +14,7 @@ interface SetlistDao {
     fun getAll(): Flow<List<Setlist>>
 
     @Query("SELECT * FROM setlist WHERE id = :id")
-    suspend fun getSetlistById(id: Int): Setlist
+    suspend fun getSetlistById(id: String): Setlist?
 
     @Insert
     suspend fun insert(setlist: Setlist)
