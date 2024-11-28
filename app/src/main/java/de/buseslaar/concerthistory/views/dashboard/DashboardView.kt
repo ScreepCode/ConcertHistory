@@ -35,7 +35,11 @@ import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 
 @Composable
-fun DashboardView(onSettings: () -> Unit, onShowDetails: (String) -> Unit) {
+fun DashboardView(
+    onSettings: () -> Unit,
+    onShowMoreConcerts: () -> Unit,
+    onShowDetails: (String) -> Unit
+) {
     val viewModel = viewModel<DashboardViewModel>()
     val menuExpanded by viewModel.menuExpanded.collectAsState()
 
@@ -57,6 +61,7 @@ fun DashboardView(onSettings: () -> Unit, onShowDetails: (String) -> Unit) {
         DashboardContent(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
+            onShowMoreConcerts = onShowMoreConcerts,
             onShowDetails = onShowDetails,
             modifier = Modifier
                 .padding(innerPadding)
@@ -69,6 +74,7 @@ fun DashboardView(onSettings: () -> Unit, onShowDetails: (String) -> Unit) {
 fun DashboardContent(
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
+    onShowMoreConcerts: () -> Unit,
     onShowDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -80,7 +86,7 @@ fun DashboardContent(
             Overview()
             LastAttendedConcertsPreview(
                 lastAttendedConcerts = lastAttendedConcerts,
-                onClickMore = {},
+                onClickMore = onShowMoreConcerts,
                 onClickDetails = onShowDetails,
             )
             FavoriteConcertsPreview()
