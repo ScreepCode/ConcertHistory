@@ -43,10 +43,6 @@ fun DashboardView(
     val viewModel = viewModel<DashboardViewModel>()
     val menuExpanded by viewModel.menuExpanded.collectAsState()
 
-    if (viewModel.isLoading) {
-        LoadingIndicator()
-    }
-
     LaunchedEffect(Unit) { viewModel.initialize() }
 
     Scaffold(
@@ -58,6 +54,10 @@ fun DashboardView(
             )
         }
     ) { innerPadding ->
+        if (viewModel.isLoading) {
+            LoadingIndicator(modifier = Modifier.padding(innerPadding))
+        }
+
         DashboardContent(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
@@ -98,7 +98,6 @@ fun DashboardContent(
             modifier = modifier.padding(16.dp)
         )
     }
-
 }
 
 @Composable

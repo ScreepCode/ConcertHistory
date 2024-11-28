@@ -22,6 +22,8 @@ fun LoadingIndicator(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
+            modifier = modifier
+                .fillMaxSize()
         ) {
             CircularProgressIndicator(
                 color = MaterialTheme.colorScheme.primary,

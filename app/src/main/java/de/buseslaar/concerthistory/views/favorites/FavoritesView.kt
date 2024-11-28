@@ -24,10 +24,6 @@ fun FavoritesView() {
     val viewModel = viewModel<FavoritesViewModel>()
     val favoriteSetlists by viewModel.favoriteSetlists.collectAsState(emptyList())
 
-    if (viewModel.isLoading) {
-        LoadingIndicator()
-    }
-
     LaunchedEffect(Unit) { viewModel.initialize() }
 
     Scaffold(
@@ -35,6 +31,10 @@ fun FavoritesView() {
             FavoritesAppBar()
         }
     ) { innerPadding ->
+        if (viewModel.isLoading) {
+            LoadingIndicator(modifier = Modifier.padding(innerPadding))
+        }
+
         FavoritesContent(
             favoriteSetlists = favoriteSetlists,
             onDislikeClick = { viewModel.removeConcertFromFavorites(it) },

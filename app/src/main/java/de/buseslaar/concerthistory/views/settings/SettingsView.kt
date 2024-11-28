@@ -26,6 +26,7 @@ import com.jamal.composeprefs3.ui.prefs.EditTextPref
 import com.jamal.composeprefs3.ui.prefs.TextPref
 import de.buseslaar.concerthistory.BuildConfig
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import de.buseslaar.concerthistory.ui.theme.ThemeMode
 
 // TODO: This should be a full screen dialog
@@ -44,6 +45,10 @@ fun SettingsView(
             )
         }
     ) { innerPadding ->
+        if (settingsViewModel.isLoading) {
+            LoadingIndicator(modifier = Modifier.padding(innerPadding))
+        }
+
         SettingsScreenContent(
             dataStore = settingsViewModel.dataStore,
             theme = theme,

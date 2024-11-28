@@ -30,17 +30,19 @@ fun VisitedView(
 ) {
     val viewModel = viewModel<VisitedViewModel>()
 
-    if (viewModel.isLoading) {
-        LoadingIndicator()
+    LaunchedEffect(Unit) {
+        viewModel.initialize()
     }
-
-    LaunchedEffect(Unit) { viewModel.initialize() }
 
     Scaffold(
         topBar = {
             VisitedAppBar()
         }
     ) { innerPadding ->
+        if (viewModel.isLoading) {
+            LoadingIndicator(modifier = Modifier.padding(innerPadding))
+        }
+
         VisitedContent(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,

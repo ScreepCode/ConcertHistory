@@ -49,10 +49,6 @@ fun SetlistDetailsView(
     val menuExpanded by viewModel.menuExpanded.collectAsState()
     val selectedSetlist = viewModel.selectedSetlist
 
-    if (viewModel.isLoading) {
-        LoadingIndicator()
-    }
-
     LaunchedEffect(Unit) {
         viewModel.initialize(selectedSetlistId)
     }
@@ -68,6 +64,10 @@ fun SetlistDetailsView(
             )
         }
     ) { innerPadding ->
+        if (viewModel.isLoading) {
+            LoadingIndicator(modifier = Modifier.padding(innerPadding))
+        }
+
         SetlistDetailsContent(
             selectedSetlist = selectedSetlist,
             modifier = Modifier.padding(innerPadding)
