@@ -22,9 +22,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
-
         viewModel.initialize()
         installSplashScreen().apply {
             setKeepOnScreenCondition {
@@ -56,6 +53,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        enableEdgeToEdge()
         setContent {
             ConcertHistoryTheme {
                 AppContent()
