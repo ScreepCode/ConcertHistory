@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.AndroidViewModel
+import de.buseslaar.concerthistory.data.database.FavoritesDatabaseProvider
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +20,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
 
     fun initialize() {
         DataStoreServiceProvider.initialize(application)
+        FavoritesDatabaseProvider.initialize(application)
 
         _isReady.value = true
     }
