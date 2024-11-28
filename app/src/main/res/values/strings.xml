@@ -10,6 +10,7 @@
     <string name="settings">Settings</string>
     <string name="visited_concerts">Visited Concerts</string>">
     <string name="setlist_details">Concerts Details</string>">
+    <string name="setlist_favorites">Your Favorites</string>">
 
     <!-- Settings -->
     <string name="settings_theme">Theme</string>
