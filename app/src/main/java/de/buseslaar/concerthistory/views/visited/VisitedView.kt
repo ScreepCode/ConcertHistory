@@ -95,7 +95,7 @@ fun VisitedContent(
         Text(
             stringResource(R.string.overview_no_username),
             fontSize = 21.sp,
-            modifier = Modifier.padding(16.dp)
+            modifier = modifier.padding(16.dp)
         )
     }
 
