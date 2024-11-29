@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -14,24 +12,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.ui.parts.Tabs
+import de.buseslaar.concerthistory.utils.TabElement
 import de.buseslaar.concerthistory.views.search.artist.ArtistSearchView
 import de.buseslaar.concerthistory.views.search.setlist.ConcertSearchView
 
 @Composable
 fun SearchView() {
     val viewModel = viewModel<SearchViewModel>()
-
     Scaffold(
         topBar = {
             SearchAppBar()
         }
     ) { innerPadding ->
-        SearchContent(
+        SearchTabs(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp),
-            viewModel.tabIndex,
             onTabSelected = { viewModel.tabIndex = it },
+            selectedTabIndex = viewModel.tabIndex,
         )
     }
 }
@@ -45,33 +44,20 @@ fun SearchAppBar() {
 }
 
 @Composable
-fun SearchContent(
-    modifier: Modifier,
-    selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit,
-) {
-    Column(modifier) {
-        SearchTabBar(selectedTabIndex = selectedTabIndex, onTabSelected)
-
-        when (selectedTabIndex) {
-            0 -> ConcertSearchView()
-            1 -> ArtistSearchView()
-        }
+fun SearchTabs(modifier: Modifier, selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
+    var elements = listOf<TabElement>(
+        TabElement(
+            label = stringResource(R.string.concerts),
+            screen = { ConcertSearchView() }
+        ), TabElement(
+            label = stringResource(R.string.artists),
+            screen = { ArtistSearchView() }
+        )
+    )
+    Column(modifier = modifier) {
+        Tabs(tabs = elements, selectedTabIndex = selectedTabIndex, onTabSelected = onTabSelected)
     }
-}
 
-@Composable
-fun SearchTabBar(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
-    TabRow(selectedTabIndex) {
-        Tab(
-            selected = selectedTabIndex == 0,
-            text = { Text(stringResource(R.string.concerts)) },
-            onClick = { onTabSelected(0) })
-        Tab(
-            selected = selectedTabIndex == 1,
-            text = { Text(stringResource(R.string.artists)) },
-            onClick = { onTabSelected(1) })
-    }
 }
 
 
