@@ -20,7 +20,7 @@ class SetlistDetailsViewModel : BaseViewModel() {
     private val favoritesRepository = SetlistRepository()
 
     private var userName: String? = null
-    var selectedSetlist: SetListDto? = null
+    var selectedSetlist by mutableStateOf<SetListDto?>(null)
     var isLiked by mutableStateOf(false)
 
     private val _menuExpanded = MutableStateFlow(false)
@@ -51,13 +51,13 @@ class SetlistDetailsViewModel : BaseViewModel() {
         isLiked = !isLiked
     }
 
-    fun addConcertToFavorites() {
+    private fun addConcertToFavorites() {
         asyncRequest {
             favoritesRepository.insert(selectedSetlist!!.reduceToEntity())
         }
     }
 
-    fun removeConcertFromFavorites() {
+    private fun removeConcertFromFavorites() {
         asyncRequest {
             favoritesRepository.getSetlistById(selectedSetlist!!.id)?.let {
                 favoritesRepository.delete(it)

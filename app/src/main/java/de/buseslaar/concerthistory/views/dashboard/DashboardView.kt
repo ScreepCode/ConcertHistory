@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.MoreVert
@@ -79,17 +80,25 @@ fun DashboardContent(
     modifier: Modifier = Modifier
 ) {
     if (isUserNameProvided) {
-        Column(
+        LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = modifier
         ) {
-            Overview()
-            LastAttendedConcertsPreview(
-                lastAttendedConcerts = lastAttendedConcerts,
-                onClickMore = onShowMoreConcerts,
-                onClickDetails = onShowDetails,
-            )
-            FavoriteConcertsPreview()
+            item {
+                Overview()
+            }
+
+            item {
+                LastAttendedConcertsPreview(
+                    lastAttendedConcerts = lastAttendedConcerts,
+                    onClickMore = onShowMoreConcerts,
+                    onClickDetails = onShowDetails,
+                )
+            }
+
+            item {
+                FavoriteConcertsPreview()
+            }
         }
     } else {
         Text(
