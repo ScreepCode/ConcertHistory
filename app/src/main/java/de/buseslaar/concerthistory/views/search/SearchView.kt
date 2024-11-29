@@ -12,18 +12,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
+import de.buseslaar.concerthistory.data.remote.dto.SetListDto
+import de.buseslaar.concerthistory.ui.parts.TabElement
 import de.buseslaar.concerthistory.ui.parts.TabSwitch
-import de.buseslaar.concerthistory.ui.parts.Tabs
 import de.buseslaar.concerthistory.views.search.artist.ArtistSearch
-import de.buseslaar.concerthistory.views.search.artist.ArtistSearchViewModel
 import de.buseslaar.concerthistory.views.search.setlist.ConcertSearch
-import de.buseslaar.concerthistory.views.search.setlist.ConcertSearchViewModel
 
 @Composable
 fun SearchView() {
     val viewModel = viewModel<SearchViewModel>()
-    val artistModel = viewModel<ArtistSearchViewModel>()
-    val concertModel = viewModel<ConcertSearchViewModel>()
     Scaffold(
         topBar = {
             SearchAppBar()
@@ -35,8 +33,28 @@ fun SearchView() {
                 .padding(horizontal = 8.dp),
             onTabSelected = { viewModel.tabIndex = it },
             selectedTabIndex = viewModel.tabIndex,
-            artistSearchViewModel = artistModel,
-            concertSearchViewModel = concertModel
+            searchConcerts = { viewModel.searchConcerts() },
+            searchArtists = { viewModel.searchArtist() },
+            concertSearchText = viewModel.concertSearchText,
+            onConcertSearchTextChange = {
+                viewModel.concertSearchText = it
+            },
+            onArtistSearchTextChange = {
+                viewModel.artistSearchText = it
+            },
+            artistSearchText = viewModel.artistSearchText,
+            concertErrorMessage = viewModel.concertErrorMessage,
+            artistErrorMessage = viewModel.artistErrorMessage,
+            concerts = viewModel.concerts,
+            artists = viewModel.artists,
+            concertTextFieldFocused = viewModel.concertTextFieldFocused,
+            artistTextFieldFocused = viewModel.artistTextFieldFocused,
+            onArtistTextFieldFocusedChange = {
+                viewModel.artistTextFieldFocused = it
+            },
+            onConcertTextFieldFocusedChange = {
+                viewModel.concertTextFieldFocused = it
+            },
         )
     }
 }
@@ -54,48 +72,57 @@ fun SearchViewContent(
     modifier: Modifier,
     selectedTabIndex: Int,
     onTabSelected: (Int) -> Unit,
-    artistSearchViewModel: ArtistSearchViewModel,
-    concertSearchViewModel: ConcertSearchViewModel
+    searchConcerts: () -> Unit = {},
+    searchArtists: () -> Unit = {},
+    concertSearchText: String,
+    onConcertSearchTextChange: (String) -> Unit = {},
+    onArtistSearchTextChange: (String) -> Unit = {},
+    artistSearchText: String,
+    concertErrorMessage: String,
+    artistErrorMessage: String,
+    concerts: List<SetListDto>,
+    artists: List<ArtistDto>,
+    concertTextFieldFocused: Boolean,
+    artistTextFieldFocused: Boolean,
+    onArtistTextFieldFocusedChange: (Boolean) -> Unit = {},
+    onConcertTextFieldFocusedChange: (Boolean) -> Unit = {}
 ) {
-    var elements = listOf<TabSwitch>(
-        TabSwitch(
+    var elements = listOf<TabElement>(
+        TabElement(
             label = stringResource(R.string.search_concerts_title),
             screen = {
                 ConcertSearch(
-                    onSearch = { concertSearchViewModel.searchConcerts() },
-                    onValueChange = {
-                        concertSearchViewModel.concertSearchText = it
-                    },
-                    value = concertSearchViewModel.concertSearchText,
-                    errorMessage = concertSearchViewModel.errorMessage,
-                    concerts = concertSearchViewModel.concerts,
-                    textFieldFocused = concertSearchViewModel._textFieldFocused,
-                    onTextFieldFocusedChange = {
-                        concertSearchViewModel._textFieldFocused = it
-                    }
+                    onSearch = { searchConcerts() },
+                    onValueChange = onConcertSearchTextChange,
+                    value = concertSearchText,
+                    errorMessage = concertErrorMessage,
+                    concerts = concerts,
+                    textFieldFocused = concertTextFieldFocused,
+                    onTextFieldFocusedChange = onConcertTextFieldFocusedChange
                 )
             }
-        ), TabSwitch(
+        ), TabElement(
             label = stringResource(R.string.search_artists_title),
             screen = {
                 ArtistSearch(
-                    onSearch = { artistSearchViewModel.searchArtist() },
-                    onValueChange = {
-                        artistSearchViewModel.artistSearchText = it
-                    },
-                    value = artistSearchViewModel.artistSearchText,
-                    errorMessage = artistSearchViewModel.errorMessage,
-                    artists = artistSearchViewModel.artists,
-                    textFieldFocused = artistSearchViewModel._textFieldFocused,
-                    onTextFieldFocusedChange = {
-                        artistSearchViewModel._textFieldFocused = it
-                    }
+                    onSearch = { searchArtists() },
+                    onValueChange = onArtistSearchTextChange,
+                    value = artistSearchText,
+                    errorMessage = artistErrorMessage,
+                    artists = artists,
+                    textFieldFocused = artistTextFieldFocused,
+                    onTextFieldFocusedChange = onArtistTextFieldFocusedChange
+
                 )
             }
         )
     )
     Column(modifier = modifier) {
-        Tabs(tabs = elements, selectedTabIndex = selectedTabIndex, onTabSelected = onTabSelected)
+        TabSwitch(
+            tabs = elements,
+            selectedTabIndex = selectedTabIndex,
+            onTabSelected = onTabSelected
+        )
     }
 
 }

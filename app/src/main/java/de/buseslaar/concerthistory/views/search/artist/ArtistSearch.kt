@@ -36,7 +36,6 @@ fun ArtistSearch(
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
 ) {
-    // val viewModel = viewModel<ArtistSearchViewModel>()
 
     ArtistSearchContent(
         onSearch = onSearch,
