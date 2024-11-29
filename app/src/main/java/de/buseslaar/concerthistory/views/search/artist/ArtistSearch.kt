@@ -40,7 +40,7 @@ fun ArtistSearch(
     ArtistSearchContent(
         onSearch = onSearch,
         onValueChange = onValueChange,
-        placeholder = stringResource(R.string.artists_search_placeholder),
+        placeholder = stringResource(R.string.search_artists_placeholder),
         value = value,
         errorMessage = errorMessage,
         artists = artists,

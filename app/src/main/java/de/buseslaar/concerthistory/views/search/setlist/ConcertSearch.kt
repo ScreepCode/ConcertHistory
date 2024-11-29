@@ -29,11 +29,11 @@ fun ConcertSearch(
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
 ) {
-    
+
     ConcertSearchContent(
         onSearch = onSearch,
         onValueChange = onValueChange,
-        placeholder = stringResource(R.string.concert_search_placeholder),
+        placeholder = stringResource(R.string.search_concert_placeholder),
         value = value,
         errorMessage = errorMessage,
         concerts = concerts,
