@@ -26,7 +26,8 @@ import de.buseslaar.concerthistory.R
 
 @Composable
 fun SearchField(
-    onEnterPress: () -> Unit,
+    modifier: Modifier = Modifier,
+    onPressEnter: () -> Unit,
     onValueChange: (String) -> Unit,
     placeholder: String,
     value: String,
@@ -43,7 +44,7 @@ fun SearchField(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
         ),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
             .onFocusChanged {
@@ -53,7 +54,7 @@ fun SearchField(
             },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
-            onEnterPress()
+            onPressEnter()
         }),
         leadingIcon = {
             IconButton(
@@ -63,7 +64,7 @@ fun SearchField(
                             Icons.AutoMirrored.Filled.ArrowBack
                         } else {
                             Icons.Default.Search
-                        }, contentDescription = stringResource(R.string.search)
+                        }, contentDescription = stringResource(R.string.search_title)
                     )
                 },
                 onClick = {

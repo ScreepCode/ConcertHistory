@@ -17,7 +17,13 @@ class ConcertSearchViewModel : BaseViewModel() {
     var _textFieldFocused by mutableStateOf(false)
 
     fun searchConcerts() {
-        asyncRequest() {
+        asyncRequest(
+            onError = { exception ->
+                errorMessage = exception.message ?: "Unknown error"
+            }
+        ) {
+            concerts = emptyList()
+            errorMessage = ""
             concerts = setlistService.searchSetlist(concertSearchText).setlists
         }
     }

@@ -11,16 +11,20 @@ class ArtistSearchViewModel : BaseViewModel() {
 
     private val artistService = ArtistService()
 
+
     var artists by mutableStateOf(emptyList<ArtistDto>())
     var artistSearchText by mutableStateOf("")
+    var errorMessage: String by mutableStateOf("")
 
     var _textFieldFocused by mutableStateOf(false)
 
     fun searchArtist() {
-        asyncRequest() {
+        asyncRequest(onError = { exception ->
+            errorMessage = exception.message ?: "Unknown error"
+        }) {
+            artists = emptyList()
+            errorMessage = ""
             artists = artistService.searchArtist(artistSearchText).artists
-
-            print(artists)
         }
     }
 }

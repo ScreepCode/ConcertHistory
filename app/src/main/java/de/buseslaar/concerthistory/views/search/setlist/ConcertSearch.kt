@@ -14,31 +14,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.SearchField
 
 @Composable
-fun ConcertSearchView() {
-    val viewModel = viewModel<ConcertSearchViewModel>()
-    SearchView(
-        onSearch = viewModel::searchConcerts,
-        onValueChange = viewModel::concertSearchText::set,
-        placeholder = stringResource(R.string.concerts),
-        value = viewModel.concertSearchText,
-        errorMessage = viewModel.errorMessage,
-        concerts = viewModel.concerts,
-        textFieldFocused = viewModel._textFieldFocused,
-        onTextFieldFocusedChange = {
-            viewModel._textFieldFocused = it
-        },
+fun ConcertSearch(
+    onSearch: () -> Unit,
+    onValueChange: (String) -> Unit,
+    value: String,
+    errorMessage: String,
+    concerts: List<SetListDto>,
+    textFieldFocused: Boolean,
+    onTextFieldFocusedChange: (Boolean) -> Unit = {},
+) {
+    
+    ConcertSearchContent(
+        onSearch = onSearch,
+        onValueChange = onValueChange,
+        placeholder = stringResource(R.string.concert_search_placeholder),
+        value = value,
+        errorMessage = errorMessage,
+        concerts = concerts,
+        textFieldFocused = textFieldFocused,
+        onTextFieldFocusedChange = onTextFieldFocusedChange
     )
 }
 
 @Composable
-fun SearchView(
+fun ConcertSearchContent(
     onSearch: () -> Unit,
     onValueChange: (String) -> Unit,
     placeholder: String,
@@ -58,7 +63,7 @@ fun SearchView(
 
             ) {
             SearchField(
-                onEnterPress = onSearch,
+                onPressEnter = onSearch,
                 onValueChange = onValueChange,
                 placeholder = placeholder,
                 value = value,
