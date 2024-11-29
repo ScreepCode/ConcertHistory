@@ -9,13 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
+import de.buseslaar.concerthistory.ui.parts.SearchField
 
 
 @Composable()
@@ -39,7 +37,11 @@ fun ArtistSearchView() {
         placeholder = stringResource(R.string.artists),
         value = viewModel.artistSearchText,
         errorMessage = "",
-        artists = viewModel.artists
+        artists = viewModel.artists,
+        viewModel._textFieldFocused,
+        onTextFieldFocusedChange = {
+            viewModel._textFieldFocused = it
+        }
     )
 }
 
@@ -52,6 +54,8 @@ fun SearchView(
     value: String,
     errorMessage: String,
     artists: List<ArtistDto>,
+    textFieldFocused: Boolean,
+    onTextFieldFocusedChange: (Boolean) -> Unit = {},
 ) {
     val uriHandler = LocalUriHandler.current
     Column {
@@ -61,22 +65,14 @@ fun SearchView(
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = {
-                    Icon(
-                        Icons.Filled.Search,
-                        contentDescription = stringResource(R.string.search)
-                    )
-                },
-                value = value,
+            SearchField(
+                onEnterPress = onSearch,
                 onValueChange = onValueChange,
-                placeholder = { Text(placeholder) }, trailingIcon = {
-                    Button(
-                        onClick = { onSearch() },
-                        content = { Text(stringResource(R.string.search)) })
-                })
-
+                placeholder = placeholder,
+                value = value,
+                textFieldFocused = textFieldFocused,
+                onTextFieldFocusedChange = onTextFieldFocusedChange
+            )
         }
 
         AnimatedVisibility(errorMessage.isNotBlank()) {

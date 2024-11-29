@@ -14,6 +14,8 @@ class ArtistSearchViewModel : BaseViewModel() {
     var artists by mutableStateOf(emptyList<ArtistDto>())
     var artistSearchText by mutableStateOf("")
 
+    var _textFieldFocused by mutableStateOf(false)
+
     fun searchArtist() {
         asyncRequest() {
             artists = artistService.searchArtist(artistSearchText).artists

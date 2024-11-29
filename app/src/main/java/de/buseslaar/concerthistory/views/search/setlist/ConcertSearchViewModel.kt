@@ -14,6 +14,8 @@ class ConcertSearchViewModel : BaseViewModel() {
     var concertSearchText by mutableStateOf("")
     var errorMessage by mutableStateOf("")
 
+    var _textFieldFocused by mutableStateOf(false)
+
     fun searchConcerts() {
         asyncRequest() {
             concerts = setlistService.searchSetlist(concertSearchText).setlists

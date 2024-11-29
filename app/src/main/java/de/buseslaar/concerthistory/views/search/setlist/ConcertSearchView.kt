@@ -8,12 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
+import de.buseslaar.concerthistory.ui.parts.SearchField
 
 @Composable
 fun ConcertSearchView() {
@@ -34,6 +30,10 @@ fun ConcertSearchView() {
         value = viewModel.concertSearchText,
         errorMessage = viewModel.errorMessage,
         concerts = viewModel.concerts,
+        textFieldFocused = viewModel._textFieldFocused,
+        onTextFieldFocusedChange = {
+            viewModel._textFieldFocused = it
+        },
     )
 }
 
@@ -45,7 +45,10 @@ fun SearchView(
     value: String,
     errorMessage: String,
     concerts: List<SetListDto>,
+    textFieldFocused: Boolean,
+    onTextFieldFocusedChange: (Boolean) -> Unit = {},
 ) {
+
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             modifier = Modifier
@@ -54,24 +57,15 @@ fun SearchView(
             verticalAlignment = Alignment.CenterVertically,
 
             ) {
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = {
-                    Icon(
-                        Icons.Filled.Search,
-                        contentDescription = stringResource(R.string.search)
-                    )
-                },
-                value = value,
+            SearchField(
+                onEnterPress = onSearch,
                 onValueChange = onValueChange,
-                placeholder = { Text(placeholder) }, trailingIcon = {
-                    Button(
-                        onClick = { onSearch() },
-                        content = { Text(stringResource(R.string.search)) })
-                })
-
+                placeholder = placeholder,
+                value = value,
+                textFieldFocused = textFieldFocused,
+                onTextFieldFocusedChange = onTextFieldFocusedChange
+            )
         }
-
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
@@ -81,9 +75,6 @@ fun SearchView(
             AnimatedVisibility(errorMessage.isNotBlank()) {
                 Text(errorMessage)
             }
-
-
-
 
             LazyColumn {
                 items(concerts) {
