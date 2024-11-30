@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class CityDto(
     val id: String,
     val name: String,
-    val state : String,
+    val state: String? = "",
     val stateCode: String,
     val country: CountryDto,
     val coords: CoordsDto,

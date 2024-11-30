@@ -12,7 +12,7 @@ class SetlistService {
     /**
      * Search for a setlist in the setlist.fm api
      *
-     * @param name the name of the artist, state, venue or tour name
+     * @param name the name of the artist
      * @param page the page of the setlist
      * @param city the city of the venue
      * @param venue the name of the venue
