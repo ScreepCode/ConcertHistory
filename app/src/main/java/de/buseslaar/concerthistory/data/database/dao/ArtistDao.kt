@@ -14,7 +14,7 @@ interface ArtistDao {
     fun getAll(): Flow<List<Artist>>
 
     @Query("SELECT * FROM artist WHERE mbid = :mbid")
-    suspend fun getArtistById(mbid: String): Artist
+    suspend fun getArtistById(mbid: String): Artist?
 
     @Insert
     suspend fun insert(artist: Artist)

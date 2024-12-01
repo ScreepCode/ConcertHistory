@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ArtistDto(
-    val mbid: String? = null,
+    val mbid: String,
     val tmid: Int? = null,
     val name: String,
     val sortName: String,
