@@ -20,7 +20,9 @@ import de.buseslaar.concerthistory.views.search.artist.ArtistSearch
 import de.buseslaar.concerthistory.views.search.setlist.ConcertSearch
 
 @Composable
-fun SearchView() {
+fun SearchView(
+    onDetailsClick: (String) -> Unit,
+) {
     val viewModel = viewModel<SearchViewModel>()
     Scaffold(
         topBar = {
@@ -55,6 +57,7 @@ fun SearchView() {
             onConcertTextFieldFocusedChange = {
                 viewModel.concertTextFieldFocused = it
             },
+            onDetailsClick = onDetailsClick
         )
     }
 }
@@ -85,7 +88,8 @@ fun SearchViewContent(
     concertTextFieldFocused: Boolean,
     artistTextFieldFocused: Boolean,
     onArtistTextFieldFocusedChange: (Boolean) -> Unit = {},
-    onConcertTextFieldFocusedChange: (Boolean) -> Unit = {}
+    onConcertTextFieldFocusedChange: (Boolean) -> Unit = {},
+    onDetailsClick: (String) -> Unit,
 ) {
     var elements = listOf<TabElement>(
         TabElement(
@@ -111,8 +115,8 @@ fun SearchViewContent(
                     errorMessage = artistErrorMessage,
                     artists = artists,
                     textFieldFocused = artistTextFieldFocused,
-                    onTextFieldFocusedChange = onArtistTextFieldFocusedChange
-
+                    onTextFieldFocusedChange = onArtistTextFieldFocusedChange,
+                    onDetailsClick,
                 )
             }
         )

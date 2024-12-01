@@ -1,7 +1,9 @@
 package de.buseslaar.concerthistory.data.remote.service
 
 import de.buseslaar.concerthistory.data.remote.api.APIManager
+import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.ArtistsDto
+import de.buseslaar.concerthistory.data.remote.dto.SetSearchDto
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
@@ -31,4 +33,11 @@ class ArtistService {
         }).body()
     }
 
+    suspend fun getArtist(mbid: String): ArtistDto {
+        return apiManger.jsonHttpClient.get("artist/${mbid}").body()
+    }
+
+    suspend fun getLastConcerts(mbid: String): SetSearchDto {
+        return apiManger.jsonHttpClient.get("artist/${mbid}/setlists").body()
+    }
 }
