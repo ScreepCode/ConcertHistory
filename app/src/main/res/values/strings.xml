@@ -5,6 +5,7 @@
     <string name="desc_back">Navigate Back</string>
     <string name="desc_show_more">Show more</string>
     <string name="desc_more_menu">More Menu</string>
+    <string name="desc_artistPicture">Artist Picture</string>
 
     <!-- App Header -->
     <string name="settings">Settings</string>
