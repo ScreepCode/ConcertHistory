@@ -23,13 +23,17 @@ fun NavGraphBuilder.addArtistDetailsNavGraph(navController: NavHostController) {
         startDestination = ArtistDetailsOverview,
     ) {
         composable<ArtistDetailsOverview> {
-            
+
         }
 
         composable<ArtistDetails> {
             val args = it.toRoute<ArtistDetails>()
+
             ArtistDetailsView(
-                selectedArtistMbId = args.artistMbId
+                selectedArtistMbId = args.artistMbId,
+                navigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }

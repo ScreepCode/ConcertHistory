@@ -13,6 +13,7 @@ class ArtistDetailsViewModel : BaseViewModel() {
     private val artistService = ArtistService()
     var artist by mutableStateOf<ArtistDto?>(null)
     var lastConcerts by mutableStateOf<List<SetListDto>>(emptyList())
+    var isLiked by mutableStateOf<Boolean>(false)
 
     fun initialize(artistMbId: String) {
         asyncRequest {
