@@ -33,10 +33,18 @@ class ArtistService {
         }).body()
     }
 
+    /**
+     * Get an artist by its mbid
+     * @param mbid the mbid of the author
+     */
     suspend fun getArtist(mbid: String): ArtistDto {
         return apiManger.jsonHttpClient.get("artist/${mbid}").body()
     }
 
+    /**
+     * Get the last concerts of an artist
+     * @param mbid the mbid of the author
+     * */
     suspend fun getLastConcerts(mbid: String): SetSearchDto {
         return apiManger.jsonHttpClient.get("artist/${mbid}/setlists").body()
     }
