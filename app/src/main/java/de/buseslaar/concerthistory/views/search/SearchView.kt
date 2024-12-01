@@ -14,8 +14,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
-import de.buseslaar.concerthistory.ui.parts.TabElement
-import de.buseslaar.concerthistory.ui.parts.TabSwitch
+import de.buseslaar.concerthistory.ui.parts.tabSwitch.TabElement
+import de.buseslaar.concerthistory.ui.parts.tabSwitch.TabSwitch
 import de.buseslaar.concerthistory.views.search.artist.ArtistSearch
 import de.buseslaar.concerthistory.views.search.setlist.ConcertSearch
 

@@ -1,4 +1,4 @@
-package de.buseslaar.concerthistory.ui.parts
+package de.buseslaar.concerthistory.ui.parts.tabSwitch
 
 import androidx.compose.runtime.Composable
 
