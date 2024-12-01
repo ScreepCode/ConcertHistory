@@ -1,32 +1,29 @@
 package de.buseslaar.concerthistory.views.search.artist
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.database.entity.Artist
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
+import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.SearchField
+import kotlinx.coroutines.flow.Flow
 
 
-@Composable()
+@Composable
 fun ArtistSearch(
     onSearch: () -> Unit,
     onValueChange: (String) -> Unit,
@@ -35,6 +32,10 @@ fun ArtistSearch(
     artists: List<ArtistDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    favoriteArtists: Flow<List<Artist>>,
+    onShowDetails: (String) -> Unit,
+    onLikeClick: (ArtistDto) -> Unit,
+    onDislikeClick: (ArtistDto) -> Unit
 ) {
 
     ArtistSearchContent(
@@ -45,7 +46,11 @@ fun ArtistSearch(
         errorMessage = errorMessage,
         artists = artists,
         textFieldFocused,
-        onTextFieldFocusedChange = onTextFieldFocusedChange
+        onTextFieldFocusedChange = onTextFieldFocusedChange,
+        favoriteArtists = favoriteArtists,
+        onShowDetails = onShowDetails,
+        onLikeClick = onLikeClick,
+        onDislikeClick = onDislikeClick
     )
 }
 
@@ -60,8 +65,12 @@ fun ArtistSearchContent(
     artists: List<ArtistDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    favoriteArtists: Flow<List<Artist>>,
+    onShowDetails: (String) -> Unit,
+    onLikeClick: (ArtistDto) -> Unit,
+    onDislikeClick: (ArtistDto) -> Unit,
 ) {
-    val uriHandler = LocalUriHandler.current
+    val favorites by favoriteArtists.collectAsState(initial = emptyList())
     Column {
         Row(
             modifier = Modifier
@@ -84,47 +93,21 @@ fun ArtistSearchContent(
         }
 
         LazyColumn {
-            items(artists) {
-                Artist(it.name, it.url, uriHandler)
+            items(artists) { artist ->
+                val isLiked = favorites.any { it.mbid == artist.mbid }
+                ArtistPreview(
+                    artist.name,
+                    onRowClick = { onShowDetails(artist.name) },
+                    isLiked = isLiked,
+                    onLikeClick = {
+                        if (!isLiked) {
+                            onLikeClick(artist)
+                        } else {
+                            onDislikeClick(artist)
+                        }
+                    }
+                )
             }
         }
     }
-
-}
-
-
-@Composable
-fun Artist(name: String, url: String, uriHandler: UriHandler) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(name)
-        Row {
-            IconButton(
-                content = {
-                    Icon(
-                        painterResource(
-                            R.drawable.favorite_outline
-                        ), contentDescription = ""
-                    )
-                },
-                onClick = {
-                    print("")
-                },
-            )
-            if (url.isNotBlank()) {
-                IconButton(content = {
-                    Icon(Icons.Outlined.Info, contentDescription = "")
-                }, onClick = {
-                    uriHandler.openUri(url)
-                })
-            }
-        }
-
-    }
-
 }

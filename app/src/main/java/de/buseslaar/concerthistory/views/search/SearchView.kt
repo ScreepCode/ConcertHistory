@@ -12,15 +12,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.database.entity.Artist
+import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.tabSwitch.TabElement
 import de.buseslaar.concerthistory.ui.parts.tabSwitch.TabSwitch
 import de.buseslaar.concerthistory.views.search.artist.ArtistSearch
 import de.buseslaar.concerthistory.views.search.setlist.ConcertSearch
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun SearchView() {
+fun SearchView(
+    onShowArtistDetails: (String) -> Unit,
+    onShowConcertDetails: (String) -> Unit
+) {
     val viewModel = viewModel<SearchViewModel>()
     Scaffold(
         topBar = {
@@ -55,6 +61,14 @@ fun SearchView() {
             onConcertTextFieldFocusedChange = {
                 viewModel.concertTextFieldFocused = it
             },
+            favoriteArtists = viewModel.favoriteArtists,
+            onShowArtistDetails = onShowArtistDetails,
+            onLikeArtistClick = { viewModel.addArtistToFavorites(it) },
+            onDislikeArtistClick = { viewModel.removeArtistFromFavorites(it) },
+            favoriteSetlists = viewModel.favoriteSetlists,
+            onShowConcertDetails = onShowConcertDetails,
+            onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
+            onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
         )
     }
 }
@@ -85,7 +99,15 @@ fun SearchViewContent(
     concertTextFieldFocused: Boolean,
     artistTextFieldFocused: Boolean,
     onArtistTextFieldFocusedChange: (Boolean) -> Unit = {},
-    onConcertTextFieldFocusedChange: (Boolean) -> Unit = {}
+    onConcertTextFieldFocusedChange: (Boolean) -> Unit = {},
+    favoriteArtists: Flow<List<Artist>>,
+    favoriteSetlists: Flow<List<Setlist>>,
+    onShowConcertDetails: (String) -> Unit,
+    onLikeConcertClick: (SetListDto) -> Unit,
+    onDislikeConcertClick: (SetListDto) -> Unit,
+    onShowArtistDetails: (String) -> Unit,
+    onLikeArtistClick: (ArtistDto) -> Unit,
+    onDislikeArtistClick: (ArtistDto) -> Unit,
 ) {
     var elements = listOf<TabElement>(
         TabElement(
@@ -98,7 +120,11 @@ fun SearchViewContent(
                     errorMessage = concertErrorMessage,
                     concerts = concerts,
                     textFieldFocused = concertTextFieldFocused,
-                    onTextFieldFocusedChange = onConcertTextFieldFocusedChange
+                    onTextFieldFocusedChange = onConcertTextFieldFocusedChange,
+                    favoriteSetlists = favoriteSetlists,
+                    onShowDetails = onShowConcertDetails,
+                    onLikeClick = onLikeConcertClick,
+                    onDislikeClick = onDislikeConcertClick
                 )
             }
         ), TabElement(
@@ -111,8 +137,11 @@ fun SearchViewContent(
                     errorMessage = artistErrorMessage,
                     artists = artists,
                     textFieldFocused = artistTextFieldFocused,
-                    onTextFieldFocusedChange = onArtistTextFieldFocusedChange
-
+                    onTextFieldFocusedChange = onArtistTextFieldFocusedChange,
+                    favoriteArtists = favoriteArtists,
+                    onShowDetails = onShowArtistDetails,
+                    onLikeClick = onLikeArtistClick,
+                    onDislikeClick = onDislikeArtistClick
                 )
             }
         )

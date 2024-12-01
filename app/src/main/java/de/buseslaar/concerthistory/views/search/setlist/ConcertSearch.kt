@@ -10,14 +10,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.SearchField
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ConcertSearch(
@@ -28,6 +32,10 @@ fun ConcertSearch(
     concerts: List<SetListDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    favoriteSetlists: Flow<List<Setlist>>,
+    onShowDetails: (String) -> Unit,
+    onLikeClick: (SetListDto) -> Unit,
+    onDislikeClick: (SetListDto) -> Unit
 ) {
 
     ConcertSearchContent(
@@ -38,7 +46,11 @@ fun ConcertSearch(
         errorMessage = errorMessage,
         concerts = concerts,
         textFieldFocused = textFieldFocused,
-        onTextFieldFocusedChange = onTextFieldFocusedChange
+        onTextFieldFocusedChange = onTextFieldFocusedChange,
+        favoriteSetlists = favoriteSetlists,
+        onShowDetails = onShowDetails,
+        onLikeClick = onLikeClick,
+        onDislikeClick = onDislikeClick
     )
 }
 
@@ -52,8 +64,12 @@ fun ConcertSearchContent(
     concerts: List<SetListDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    favoriteSetlists: Flow<List<Setlist>>,
+    onShowDetails: (String) -> Unit,
+    onLikeClick: (SetListDto) -> Unit,
+    onDislikeClick: (SetListDto) -> Unit
 ) {
-
+    val favorites by favoriteSetlists.collectAsState(initial = emptyList())
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             modifier = Modifier
@@ -83,14 +99,22 @@ fun ConcertSearchContent(
 
             LazyColumn {
                 items(concerts) { concert ->
+                    val isLiked = favorites.any { it.id == concert.id }
                     with(concert) {
                         ConcertPreview(
                             artistName = artist.name,
                             venueName = venue.name,
                             venueCity = venue.city.name,
                             eventDate = eventDate,
-                            onRowClick = {},
-                            isLiked = false,
+                            onRowClick = { onShowDetails(concert.id) },
+                            isLiked = isLiked,
+                            onLikeClick = {
+                                if (!isLiked) {
+                                    onLikeClick(concert)
+                                } else {
+                                    onDislikeClick(concert)
+                                }
+                            }
                         )
                     }
                 }
