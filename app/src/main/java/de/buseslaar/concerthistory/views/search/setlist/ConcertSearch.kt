@@ -82,8 +82,17 @@ fun ConcertSearchContent(
             }
 
             LazyColumn {
-                items(concerts) {
-                    ConcertPreview(concert = it, onRowClick = {}, isLiked = false)
+                items(concerts) { concert ->
+                    with(concert) {
+                        ConcertPreview(
+                            artistName = artist.name,
+                            venueName = venue.name,
+                            venueCity = venue.city.name,
+                            eventDate = eventDate,
+                            onRowClick = {},
+                            isLiked = false,
+                        )
+                    }
                 }
             }
         }
