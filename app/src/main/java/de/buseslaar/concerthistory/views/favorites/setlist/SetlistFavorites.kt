@@ -10,6 +10,7 @@ import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 @Composable
 fun SetlistFavorites(
     favoriteSetlists: List<Setlist>,
+    onRowClick: (String) -> Unit,
     onDislikeClick: (Setlist) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -23,7 +24,7 @@ fun SetlistFavorites(
                     venueName = venueName,
                     venueCity = venueCity,
                     eventDate = eventDate,
-                    onRowClick = {},
+                    onRowClick = { onRowClick(favoriteSetlist.id) },
                     isLiked = true,
                     onLikeClick = { onDislikeClick(favoriteSetlist) },
                 )

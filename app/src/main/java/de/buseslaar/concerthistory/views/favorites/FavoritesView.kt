@@ -23,7 +23,10 @@ import de.buseslaar.concerthistory.views.favorites.artist.ArtistFavorites
 import de.buseslaar.concerthistory.views.favorites.setlist.SetlistFavorites
 
 @Composable
-fun FavoritesView() {
+fun FavoritesView(
+    onShowArtistDetails: (String) -> Unit,
+    onShowConcertDetails: (String) -> Unit
+) {
     val viewModel = viewModel<FavoritesViewModel>()
     val favoriteSetlists by viewModel.favoriteSetlists.collectAsState(emptyList())
     val favoriteArtists by viewModel.favoriteArtists.collectAsState(emptyList())
@@ -44,6 +47,8 @@ fun FavoritesView() {
             selectedTabIndex = viewModel.tabIndex,
             favoriteSetlists = favoriteSetlists,
             favoriteArtists = favoriteArtists,
+            onSetlistRowClick = onShowConcertDetails,
+            onArtistRowClick = onShowArtistDetails,
             onDislikeSetlistClick = {
                 viewModel.removeConcertFromFavorites(it)
             },
@@ -61,6 +66,8 @@ fun FavoritesViewContent(
     onTabSelected: (Int) -> Unit,
     favoriteSetlists: List<Setlist>,
     favoriteArtists: List<Artist>,
+    onSetlistRowClick: (String) -> Unit,
+    onArtistRowClick: (String) -> Unit,
     onDislikeSetlistClick: (Setlist) -> Unit,
     onDislikeArtistClick: (Artist) -> Unit,
     modifier: Modifier = Modifier
@@ -71,6 +78,7 @@ fun FavoritesViewContent(
             screen = {
                 SetlistFavorites(
                     favoriteSetlists = favoriteSetlists,
+                    onRowClick = onSetlistRowClick,
                     onDislikeClick = { onDislikeSetlistClick(it) },
                 )
             }
@@ -80,6 +88,7 @@ fun FavoritesViewContent(
             screen = {
                 ArtistFavorites(
                     favoriteArtists = favoriteArtists,
+                    onRowClick = onArtistRowClick,
                     onDislikeClick = { onDislikeArtistClick(it) },
                 )
             }

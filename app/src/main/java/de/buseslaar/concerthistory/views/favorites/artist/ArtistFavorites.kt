@@ -10,6 +10,7 @@ import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 @Composable
 fun ArtistFavorites(
     favoriteArtists: List<Artist>,
+    onRowClick: (String) -> Unit,
     onDislikeClick: (Artist) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -20,7 +21,7 @@ fun ArtistFavorites(
             with(favoriteArtist) {
                 ArtistPreview(
                     name = name,
-                    onRowClick = {},
+                    onRowClick = { onRowClick(favoriteArtist.mbid) },
                     isLiked = true,
                     onLikeClick = { onDislikeClick(favoriteArtist) },
                 )
