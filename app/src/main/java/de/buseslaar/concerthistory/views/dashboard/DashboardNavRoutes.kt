@@ -22,8 +22,13 @@ fun NavGraphBuilder.addDashboardNavGraph(navController: NavHostController) {
     ) {
         composable<DashboardOverview> {
             DashboardView(
-                onShowDetails = { setlistId -> navController.navigate(SetlistDetails(setlistId = setlistId)) },
+                onShowConcertDetails = { setlistId ->
+                    navController.navigate(SetlistDetails(setlistId = setlistId))
+                },
                 onShowMoreConcerts = { navController.navigate(VisitedOverview) },
+                onShowMoreArtists = { /* TODO */ },
+                onShowArtistDetails = { artistId -> /* TODO */ },
+
                 onSettings = { navController.navigate(SettingsOverview) }
             )
         }

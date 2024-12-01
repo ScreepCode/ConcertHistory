@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,7 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.database.entity.Artist
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
+import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 
@@ -39,10 +42,14 @@ import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 fun DashboardView(
     onSettings: () -> Unit,
     onShowMoreConcerts: () -> Unit,
-    onShowDetails: (String) -> Unit
+    onShowConcertDetails: (String) -> Unit,
+    onShowMoreArtists: () -> Unit,
+    onShowArtistDetails: (String) -> Unit
 ) {
     val viewModel = viewModel<DashboardViewModel>()
     val menuExpanded by viewModel.menuExpanded.collectAsState()
+    val favoriteArtists by viewModel.favoriteArtists.collectAsState(initial = emptyList())
+
 
     LaunchedEffect(Unit) { viewModel.initialize() }
 
@@ -63,7 +70,10 @@ fun DashboardView(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
             onShowMoreConcerts = onShowMoreConcerts,
-            onShowDetails = onShowDetails,
+            onShowConcertDetails = onShowConcertDetails,
+            favoriteArtists = favoriteArtists,
+            onShowMoreArtists = onShowMoreArtists,
+            onShowArtistDetails = onShowArtistDetails,
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp)
@@ -75,14 +85,17 @@ fun DashboardView(
 fun DashboardContent(
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
+    favoriteArtists: List<Artist>,
     onShowMoreConcerts: () -> Unit,
-    onShowDetails: (String) -> Unit,
+    onShowConcertDetails: (String) -> Unit,
+    onShowMoreArtists: () -> Unit,
+    onShowArtistDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (isUserNameProvided) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier
+            modifier = modifier.fillMaxSize()
         ) {
             item {
                 Overview()
@@ -92,12 +105,16 @@ fun DashboardContent(
                 LastAttendedConcertsPreview(
                     lastAttendedConcerts = lastAttendedConcerts,
                     onClickMore = onShowMoreConcerts,
-                    onClickDetails = onShowDetails,
+                    onClickDetails = onShowConcertDetails,
                 )
             }
 
             item {
-                FavoriteConcertsPreview()
+                FavoriteConcertsPreview(
+                    favoriteArtists = favoriteArtists,
+                    onClickMore = onShowMoreArtists,
+                    onClickDetails = onShowArtistDetails,
+                )
             }
         }
     } else {
@@ -160,14 +177,39 @@ private fun LastAttendedConcertsPreview(
 }
 
 @Composable
-private fun FavoriteConcertsPreview() {
+private fun FavoriteConcertsPreview(
+    favoriteArtists: List<Artist>,
+    onClickMore: () -> Unit,
+    onClickDetails: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     ElevatedCard {
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                stringResource(R.string.overview_favourite_artists_header),
-                fontSize = 21.sp,
-                modifier = Modifier.padding(16.dp)
-            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onClickMore() }
+                    .padding(16.dp)
+            ) {
+                Text(
+                    stringResource(R.string.overview_favourite_artists_header),
+                    fontSize = 21.sp,
+                )
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = stringResource(R.string.desc_show_more),
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+            favoriteArtists.take(3).forEach { artist ->
+                with(artist) {
+                    ArtistPreview(
+                        name = name,
+                        onRowClick = { onClickDetails(mbid) },
+                    )
+                }
+            }
         }
     }
 }
