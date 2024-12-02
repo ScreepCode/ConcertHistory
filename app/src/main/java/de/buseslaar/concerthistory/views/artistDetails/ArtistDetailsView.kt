@@ -102,84 +102,108 @@ fun ArtistDetailsViewContent(
     lastConcerts: List<SetListDto>,
     favoriteSetlists: Flow<List<Setlist>>,
     onShowDetails: (String) -> Unit,
-    onLikeConcertClick: (SetListDto) -> Unit = {},
+    onLikeConcertClick: (SetListDto) -> Unit,
     onDislikeConcertClick: (SetListDto) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Column(modifier = modifier) {
+        ArtistHeader(artist = artist)
+        LastConcertsCard(
+            lastConcerts = lastConcerts,
+            favoriteSetlists = favoriteSetlists,
+            onShowDetails = onShowDetails,
+            onLikeConcertClick = onLikeConcertClick,
+            onDislikeConcertClick = onDislikeConcertClick
+        )
+    }
+}
+
+@Composable
+fun ArtistHeader(artist: ArtistDto?, modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
+
+    ElevatedCard(
+        modifier = modifier
+            .padding(12.dp)
+            .fillMaxWidth(),
+    ) {
+        Row(modifier = Modifier.padding(16.dp)) {
+            IconButton(
+                content = {
+                    Icon(
+                        Icons.Default.Person,
+                        contentDescription = "",
+                        modifier = Modifier.size(48.dp)
+                    )
+                },
+                onClick = {
+                    artist?.let { uriHandler.openUri(it.url) }
+                }
+            )
+            IconButton(
+                content = {
+                    Icon(
+                        painterResource(R.drawable.spotify),
+                        contentDescription = "Spotify"
+                    )
+                }, onClick = {
+                    uriHandler.openUri("https://open.spotify.com/search/${artist?.name}")
+                })
+
+            IconButton(
+                content = {
+                    Icon(
+                        painterResource(R.drawable.youtube),
+                        contentDescription = "YouTube"
+                    )
+                }, onClick = {
+                    uriHandler.openUri("https://www.youtube.com/results?search_query=${artist?.name}")
+                })
+
+        }
+    }
+}
+
+@Composable
+fun LastConcertsCard(
+    lastConcerts: List<SetListDto>,
+    favoriteSetlists: Flow<List<Setlist>>,
+    onShowDetails: (String) -> Unit,
+    onLikeConcertClick: (SetListDto) -> Unit,
+    onDislikeConcertClick: (SetListDto) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val favorites by favoriteSetlists.collectAsState(initial = emptyList())
 
-    Column(modifier = modifier) {
-        ElevatedCard(
-            modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
-        ) {
-            Row(modifier = Modifier.padding(16.dp)) {
-                IconButton(
-                    content = {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = "",
-                            modifier = Modifier.size(48.dp)
-                        )
-                    },
-                    onClick = {
-                        artist?.let { uriHandler.openUri(it.url) }
-                    }
-                )
-                IconButton(
-                    content = {
-                        Icon(
-                            painterResource(R.drawable.spotify),
-                            contentDescription = "Spotify"
-                        )
-                    }, onClick = {
-                        uriHandler.openUri("https://open.spotify.com/search/${artist?.name}")
-                    })
+    ElevatedCard(modifier = modifier.padding(12.dp)) {
+        Column {
+            Text(
+                text = stringResource(R.string.artist_details_lastConcerts),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                fontSize = 21.sp,
+            )
+            LazyColumn(userScrollEnabled = false) {
+                items(lastConcerts.take(10)) { concert ->
+                    val isLiked = favorites.any { it.id == concert.id }
 
-                IconButton(
-                    content = {
-                        Icon(
-                            painterResource(R.drawable.youtube),
-                            contentDescription = "YouTube"
-                        )
-                    }, onClick = {
-                        uriHandler.openUri("https://www.youtube.com/results?search_query=${artist?.name}")
-                    })
-
-            }
-        }
-        ElevatedCard(modifier = Modifier.padding(12.dp)) {
-            Column {
-                Text(
-                    text = stringResource(R.string.artist_details_lastConcerts),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    fontSize = 21.sp,
-                )
-                LazyColumn(userScrollEnabled = false) {
-                    items(lastConcerts.take(10)) { concert ->
-                        val isLiked = favorites.any { it.id == concert.id }
-
-                        with(concert) {
-                            ConcertPreview(
-                                artistName = concert.artist.name,
-                                venueName = venue.name,
-                                venueCity = venue.city.name,
-                                eventDate = eventDate,
-                                onRowClick = { onShowDetails(concert.id) },
-                                isLiked = isLiked,
-                                onLikeClick = {
-                                    if (!isLiked) {
-                                        onLikeConcertClick(concert)
-                                    } else {
-                                        onDislikeConcertClick(concert)
-                                    }
+                    with(concert) {
+                        ConcertPreview(
+                            artistName = concert.artist.name,
+                            venueName = venue.name,
+                            venueCity = venue.city.name,
+                            eventDate = eventDate,
+                            onRowClick = { onShowDetails(concert.id) },
+                            isLiked = isLiked,
+                            onLikeClick = {
+                                if (!isLiked) {
+                                    onLikeConcertClick(concert)
+                                } else {
+                                    onDislikeConcertClick(concert)
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
             }
