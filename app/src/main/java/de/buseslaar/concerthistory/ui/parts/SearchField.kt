@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +57,21 @@ fun SearchField(
         keyboardActions = KeyboardActions(onSearch = {
             onPressEnter()
         }),
+        trailingIcon = {
+            if (textFieldFocused) {
+                IconButton(
+                    content = {
+                        Icon(
+                            Icons.Filled.Clear,
+                            contentDescription = stringResource(R.string.searchField_clearText)
+                        )
+                    },
+                    onClick = {
+                        onValueChange("")
+                    }
+                )
+            }
+        },
         leadingIcon = {
             IconButton(
                 content = {

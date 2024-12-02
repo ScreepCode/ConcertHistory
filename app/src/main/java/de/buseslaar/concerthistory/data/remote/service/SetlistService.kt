@@ -1,6 +1,7 @@
 package de.buseslaar.concerthistory.data.remote.service
 
 import de.buseslaar.concerthistory.data.remote.api.APIManager
+import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetSearchDto
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -39,5 +40,15 @@ class SetlistService {
             }
         }).body()
     }
+
+
+    /**
+     * Get an setlist by its id
+     * @param id the id of the author
+     */
+    suspend fun getSetlist(id: String): ArtistDto {
+        return apiManger.jsonHttpClient.get("setlist/${id}").body()
+    }
+
 
 }

@@ -46,4 +46,9 @@
     <string name="search_concert_placeholder">Search Concerts</string>
     <string name="search_concerts_title">Concerts</string>
     <string name="search_artists_title">Artists</string>
+
+    <string name="searchField_clearText">Clear Text</string>
+
+    <!-- Artist Details -->
+    <string name="artist_details_lastConcerts">Last Concerts</string>
 </resources>
