@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.buseslaar.concerthistory.views.artistDetails.ArtistDetails
+import de.buseslaar.concerthistory.views.favorites.FavoritesOverview
+import de.buseslaar.concerthistory.views.favorites.FavoritesTab
 import de.buseslaar.concerthistory.views.setlistDetails.SetlistDetails
 import de.buseslaar.concerthistory.views.settings.SettingsOverview
 import de.buseslaar.concerthistory.views.visited.VisitedOverview
@@ -27,7 +29,7 @@ fun NavGraphBuilder.addDashboardNavGraph(navController: NavHostController) {
                     navController.navigate(SetlistDetails(setlistId = setlistId))
                 },
                 onShowMoreConcerts = { navController.navigate(VisitedOverview) },
-                onShowMoreArtists = { /* TODO */ },
+                onShowMoreArtists = { navController.navigate(FavoritesOverview(tab = FavoritesTab.ARTISTS.ordinal)) },
                 onShowArtistDetails = { artistId -> navController.navigate(ArtistDetails(artistMbId = artistId)) },
                 onSettings = { navController.navigate(SettingsOverview) }
             )
