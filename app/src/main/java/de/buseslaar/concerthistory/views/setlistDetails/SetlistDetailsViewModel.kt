@@ -12,14 +12,12 @@ import de.buseslaar.concerthistory.utils.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 
 class SetlistDetailsViewModel : BaseViewModel() {
     private val dataStore = DataStoreServiceProvider.getInstance()
     private val setlistService = SetlistService()
     private val favoritesRepository = SetlistRepository()
 
-    private var userName: String? = null
     var selectedSetlist by mutableStateOf<SetListDto?>(null)
     var isLiked by mutableStateOf(false)
 
@@ -28,8 +26,6 @@ class SetlistDetailsViewModel : BaseViewModel() {
 
     fun initialize(selectedSetlistId: String) {
         asyncRequest {
-            userName = dataStore.setlistUsername.first()
-
             selectedSetlist = setlistService.getSetlist(selectedSetlistId)
 
             isLiked = favoritesRepository.getSetlistById(selectedSetlistId) != null
