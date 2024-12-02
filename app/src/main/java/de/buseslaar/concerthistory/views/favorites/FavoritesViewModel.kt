@@ -18,10 +18,6 @@ class FavoritesViewModel : BaseViewModel() {
     val favoriteSetlists: Flow<List<Setlist>> = setlistFavoritesRepository.favoriteSetlists
     val favoriteArtists: Flow<List<Artist>> = artistFavoritesRepository.favoriteArtists
 
-    fun initialize() {
-
-    }
-
     fun removeConcertFromFavorites(setlist: Setlist) {
         asyncRequest {
             setlistFavoritesRepository.delete(setlist)
