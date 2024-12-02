@@ -18,11 +18,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.buseslaar.concerthistory.R
-import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 
 @Composable
 fun ConcertPreview(
-    concert: SetListDto,
+    artistName: String,
+    venueName: String,
+    venueCity: String,
+    eventDate: String,
     onRowClick: () -> Unit,
     isLiked: Boolean = false,
     onLikeClick: (() -> Unit)? = null,
@@ -32,8 +34,8 @@ fun ConcertPreview(
             .height(64.dp)
     ) {
         ListItem(
-            headlineContent = { Text(concert.artist.name) },
-            supportingContent = { Text(concert.venue.name) },
+            headlineContent = { Text(artistName) },
+            supportingContent = { Text("$venueName, $venueCity") },
             trailingContent = {
                 Column(
                     verticalArrangement = Arrangement.Top,
@@ -41,7 +43,7 @@ fun ConcertPreview(
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     Row(modifier = Modifier.fillMaxHeight()) {
-                        Text(concert.eventDate, modifier = Modifier.padding(8.dp))
+                        Text(eventDate, modifier = Modifier.padding(8.dp))
                         onLikeClick?.let {
                             Icon(
                                 painter = if (isLiked) painterResource(R.drawable.favorite_filled) else painterResource(
@@ -52,7 +54,7 @@ fun ConcertPreview(
                                 ),
                                 modifier = Modifier
                                     .size(32.dp)
-                                    .clickable { }
+                                    .clickable { onLikeClick.invoke() }
                                     .align(Alignment.CenterVertically)
                             )
                         }

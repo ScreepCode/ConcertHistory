@@ -1,10 +1,17 @@
 package de.buseslaar.concerthistory.data.database.repository
 
-import de.buseslaar.concerthistory.data.database.dao.ArtistDao
+import de.buseslaar.concerthistory.data.database.FavoritesDatabaseProvider
 import de.buseslaar.concerthistory.data.database.entity.Artist
+import kotlinx.coroutines.flow.Flow
 
-class ArtistRepository(private val artistDao: ArtistDao) {
-    val artists = artistDao.getAll()
+class ArtistRepository() {
+    private val artistDao = FavoritesDatabaseProvider.getInstance().artistDao
+
+    val favoriteArtists: Flow<List<Artist>> = artistDao.getAll()
+
+    suspend fun getArtistByMbid(mbid: String): Artist? {
+        return artistDao.getArtistById(mbid)
+    }
 
     suspend fun insert(artist: Artist) {
         artistDao.insert(artist)

@@ -1,11 +1,17 @@
 package de.buseslaar.concerthistory.data.database.repository
 
-import de.buseslaar.concerthistory.data.database.dao.SetlistDao
+import de.buseslaar.concerthistory.data.database.FavoritesDatabaseProvider
 import de.buseslaar.concerthistory.data.database.entity.Setlist
+import kotlinx.coroutines.flow.Flow
 
-class SetlistRepository(private val setlistDao: SetlistDao) {
+class SetlistRepository {
+    private val setlistDao = FavoritesDatabaseProvider.getInstance().setlistDao
 
-    val setlists = setlistDao.getAll()
+    val favoriteSetlists: Flow<List<Setlist>> = setlistDao.getAll()
+
+    suspend fun getSetlistById(id: String): Setlist? {
+        return setlistDao.getSetlistById(id)
+    }
 
     suspend fun insert(setlist: Setlist) {
         setlistDao.insert(setlist)

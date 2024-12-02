@@ -3,10 +3,13 @@ package de.buseslaar.concerthistory.views.dashboard
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import de.buseslaar.concerthistory.data.database.entity.Artist
+import de.buseslaar.concerthistory.data.database.repository.ArtistRepository
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.data.remote.service.UserService
 import de.buseslaar.concerthistory.utils.BaseViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +18,8 @@ import kotlinx.coroutines.flow.first
 class DashboardViewModel : BaseViewModel() {
     private val userService = UserService()
     private val dataStore = DataStoreServiceProvider.getInstance()
+    private val artistFavoritesRepository = ArtistRepository()
+    val favoriteArtists: Flow<List<Artist>> = artistFavoritesRepository.favoriteArtists
 
     private var userName: String? = null
 

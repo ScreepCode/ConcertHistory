@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.buseslaar.concerthistory.views.artistDetails.ArtistDetails
+import de.buseslaar.concerthistory.views.setlistDetails.SetlistDetails
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,9 +20,14 @@ fun NavGraphBuilder.addSearchNavGraph(navController: NavHostController) {
         startDestination = Search,
     ) {
         composable<Search> {
-            SearchView(onDetailsClick = {
-                navController.navigate(ArtistDetails(it))
-            })
+            SearchView(
+                onShowConcertDetails = { concertId ->
+                    navController.navigate(SetlistDetails(setlistId = concertId))
+                },
+                onShowArtistDetails = { artistId ->
+                    navController.navigate(ArtistDetails(artistMbId = artistId))
+                }
+            )
         }
     }
 }

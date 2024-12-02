@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "artist")
 data class Artist(
-    @PrimaryKey()
+    @PrimaryKey
     val mbid: String,
 
     @ColumnInfo(name = "name")
