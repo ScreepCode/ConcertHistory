@@ -1,5 +1,6 @@
 package de.buseslaar.concerthistory.views.settings
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -13,6 +14,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,6 +31,8 @@ import com.jamal.composeprefs3.ui.prefs.TextPref
 import de.buseslaar.concerthistory.BuildConfig
 import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.ui.parts.textDialog.TextDialog
+import de.buseslaar.concerthistory.ui.parts.textDialog.TextDialogInfo
 import de.buseslaar.concerthistory.ui.theme.ThemeMode
 
 // TODO: This should be a full screen dialog
@@ -70,6 +76,18 @@ fun SettingsScreenContent(
     setlistUsernameKey: Preferences.Key<String>,
     modifier: Modifier = Modifier,
 ) {
+    var openDialog by remember { mutableStateOf<TextDialogInfo?>(null) }
+
+    AnimatedVisibility(openDialog != null) {
+        openDialog?.let { dialogInfo ->
+            TextDialog(
+                dialogInfo = dialogInfo,
+                onDismissRequest = { openDialog = null },
+                modifier = Modifier
+            )
+        }
+    }
+
     PrefsScreen(
         dataStore = dataStore,
         modifier = modifier
@@ -111,16 +129,47 @@ fun SettingsScreenContent(
                     dialogMessage = stringResource(R.string.settings_setlist_username_message),
                 )
             }
-
         }
 
         prefsGroup({
             GroupHeader(
-                title = stringResource(R.string.settings_about_header),
+                title = stringResource(R.string.settings_about),
                 color = MaterialTheme.colorScheme.onSurface,
             )
         }) {
-            prefsItem { TextPref(title = stringResource(R.string.settings_about_text)) }
+            prefsItem {
+                TextPref(
+                    title = stringResource(R.string.settings_about_app_header),
+                    summary = stringResource(R.string.settings_about_app_text),
+                    enabled = true,
+                    onClick = {
+                        openDialog = TextDialogInfo(
+                            titleResId = R.string.settings_about_app_dialog_header,
+                            textResIds = listOf(
+                                R.string.settings_about_app_dialog_text_1,
+                                R.string.settings_about_app_dialog_text_2,
+                            )
+                        )
+                    }
+                )
+            }
+
+            prefsItem {
+                TextPref(
+                    title = stringResource(R.string.settings_about_dev_header),
+                    summary = stringResource(R.string.settings_about_dev_text),
+                    enabled = true,
+                    onClick = {
+                        openDialog = TextDialogInfo(
+                            titleResId = R.string.settings_about_dev_dialog_header,
+                            textResIds = listOf(
+                                R.string.settings_about_dev_dialog_text_1,
+                                R.string.settings_about_dev_dialog_text_2,
+                            )
+                        )
+                    }
+                )
+            }
         }
 
         prefsItem {
@@ -131,7 +180,6 @@ fun SettingsScreenContent(
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
