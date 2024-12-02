@@ -1,7 +1,6 @@
 package de.buseslaar.concerthistory.views.search
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.buseslaar.concerthistory.data.database.entity.Artist
@@ -17,7 +16,7 @@ import de.buseslaar.concerthistory.utils.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 
 class SearchViewModel : BaseViewModel() {
-    var tabIndex: Int by mutableIntStateOf(0)
+    var tabIndex: SearchTab by mutableStateOf(SearchTab.SETLISTS)
 
     private val artistService = ArtistService()
     private var setlistService = SetlistService()
@@ -40,6 +39,10 @@ class SearchViewModel : BaseViewModel() {
     var concertErrorMessage by mutableStateOf("")
 
     var concertTextFieldFocused by mutableStateOf(false)
+
+    fun initialize(initialTab: SearchTab) {
+        tabIndex = initialTab
+    }
 
     fun searchArtist() {
         asyncRequest(onError = { exception ->
