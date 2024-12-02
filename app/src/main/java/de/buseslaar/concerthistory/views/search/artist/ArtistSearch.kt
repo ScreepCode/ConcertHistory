@@ -1,6 +1,7 @@
 package de.buseslaar.concerthistory.views.search.artist
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ fun ArtistSearch(
     artists: List<ArtistDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    onDetailsClick: (String) -> Unit,
 ) {
 
     ArtistSearchContent(
@@ -45,7 +47,8 @@ fun ArtistSearch(
         errorMessage = errorMessage,
         artists = artists,
         textFieldFocused,
-        onTextFieldFocusedChange = onTextFieldFocusedChange
+        onTextFieldFocusedChange = onTextFieldFocusedChange,
+        onDetailsClick
     )
 }
 
@@ -60,6 +63,7 @@ fun ArtistSearchContent(
     artists: List<ArtistDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    onDetailsClick: (String) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
     Column {
@@ -85,7 +89,13 @@ fun ArtistSearchContent(
 
         LazyColumn {
             items(artists) {
-                Artist(it.name, it.url, uriHandler)
+                Artist(
+                    name = it.name,
+                    url = it.url,
+                    mbid = it.mbid.toString(),
+                    uriHandler = uriHandler,
+                    onRowClick = onDetailsClick
+                )
             }
         }
     }
@@ -94,11 +104,20 @@ fun ArtistSearchContent(
 
 
 @Composable
-fun Artist(name: String, url: String, uriHandler: UriHandler) {
+fun Artist(
+    name: String,
+    mbid: String,
+    url: String,
+    uriHandler: UriHandler,
+    onRowClick: ((String) -> Unit)? = null
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable {
+                onRowClick?.let { it(mbid) }
+            },
         Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
