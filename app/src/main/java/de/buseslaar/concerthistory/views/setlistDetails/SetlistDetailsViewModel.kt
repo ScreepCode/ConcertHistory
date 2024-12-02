@@ -7,7 +7,7 @@ import de.buseslaar.concerthistory.data.database.repository.SetlistRepository
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 import de.buseslaar.concerthistory.data.mapper.reduceToEntity
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
-import de.buseslaar.concerthistory.data.remote.service.UserService
+import de.buseslaar.concerthistory.data.remote.service.SetlistService
 import de.buseslaar.concerthistory.utils.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 
 class SetlistDetailsViewModel : BaseViewModel() {
-    private val userService = UserService()
     private val dataStore = DataStoreServiceProvider.getInstance()
+    private val setlistService = SetlistService()
     private val favoritesRepository = SetlistRepository()
 
     private var userName: String? = null
@@ -30,9 +30,7 @@ class SetlistDetailsViewModel : BaseViewModel() {
         asyncRequest {
             userName = dataStore.setlistUsername.first()
 
-            selectedSetlist = (userName?.let { userService.getUserAttended(it).setlists }
-                ?: emptyList()).find { it.id == selectedSetlistId }
-                ?: throw Exception("Setlist not found")
+            selectedSetlist = setlistService.getSetlist(selectedSetlistId)
 
             isLiked = favoritesRepository.getSetlistById(selectedSetlistId) != null
         }
