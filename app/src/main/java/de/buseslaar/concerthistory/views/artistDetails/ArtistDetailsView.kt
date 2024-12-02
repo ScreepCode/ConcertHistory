@@ -1,6 +1,5 @@
 package de.buseslaar.concerthistory.views.artistDetails
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
@@ -39,8 +38,6 @@ import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ArtistDetailsView(
     selectedArtistMbId: String,
@@ -58,33 +55,15 @@ fun ArtistDetailsView(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        content = { Icon(Icons.Filled.ArrowBack, contentDescription = "") },
-                        onClick = {
-                            navigateBack()
-                        })
-                },
-                title = {
-                    Text(viewModel.artist?.name ?: "")
-                },
-                actions = {
-                    IconButton(onClick = {
-
-                    }, content = {
-                        if (viewModel.isLiked)
-                            Icon(Icons.Filled.Favorite, contentDescription = "")
-                        else
-                            Icon(Icons.Filled.FavoriteBorder, contentDescription = "")
-
-                    })
-                }
-
+            ArtistDetailsTopAppBar(
+                artistName = viewModel.selectedArtist?.name ?: "",
+                isLiked = viewModel.isLiked,
+                onNavigateBack = navigateBack,
+                onLikeToggle = { viewModel.onLikeToggle() }
             )
         }) { innerPadding ->
         ArtistDetailsViewContent(
-            artist = viewModel.artist,
+            artist = viewModel.selectedArtist,
             lastConcerts = viewModel.lastConcerts,
             favoriteSetlists = viewModel.favoriteSetlists,
             onShowDetails = { },
@@ -209,4 +188,44 @@ fun LastConcertsCard(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ArtistDetailsTopAppBar(
+    artistName: String,
+    isLiked: Boolean,
+    onNavigateBack: () -> Unit,
+    onLikeToggle: () -> Unit
+) {
+    TopAppBar(
+        navigationIcon = {
+            IconButton(
+                content = {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.desc_back)
+                    )
+                },
+                onClick = onNavigateBack
+            )
+        },
+        title = {
+            Text(artistName)
+        },
+        actions = {
+            IconButton(onClick = onLikeToggle, content = {
+                if (isLiked)
+                    Icon(
+                        Icons.Filled.Favorite,
+                        contentDescription = stringResource(R.string.isLiked)
+                    )
+                else
+                    Icon(
+                        Icons.Filled.FavoriteBorder,
+                        contentDescription = stringResource(R.string.isNotLiked)
+                    )
+            })
+        }
+    )
 }
