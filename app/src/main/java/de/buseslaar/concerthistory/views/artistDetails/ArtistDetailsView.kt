@@ -115,8 +115,6 @@ fun ArtistDetailsViewContent(
                         artist?.let { uriHandler.openUri(it.url) }
                     }
                 )
-                Text(artist?.disambiguation ?: "")
-
                 IconButton(
                     content = {
                         Icon(
