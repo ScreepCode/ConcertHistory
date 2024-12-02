@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,10 +25,18 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun SearchView(
+    initialTab: SearchTab = SearchTab.SETLISTS,
     onShowArtistDetails: (String) -> Unit,
     onShowConcertDetails: (String) -> Unit
 ) {
     val viewModel = viewModel<SearchViewModel>()
+
+    LaunchedEffect(Unit) {
+        viewModel.initialize(
+            initialTab = initialTab
+        )
+    }
+
     Scaffold(
         topBar = {
             SearchAppBar()
@@ -84,8 +93,8 @@ fun SearchAppBar() {
 @Composable
 fun SearchViewContent(
     modifier: Modifier,
-    selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit,
+    selectedTabIndex: SearchTab,
+    onTabSelected: (SearchTab) -> Unit,
     searchConcerts: () -> Unit = {},
     searchArtists: () -> Unit = {},
     concertSearchText: String,
@@ -149,8 +158,8 @@ fun SearchViewContent(
     Column(modifier = modifier) {
         TabSwitch(
             tabs = elements,
-            selectedTabIndex = selectedTabIndex,
-            onTabSelected = onTabSelected
+            selectedTabIndex = selectedTabIndex.ordinal,
+            onTabSelected = { onTabSelected(SearchTab.entries[it]) }
         )
     }
 

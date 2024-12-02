@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,12 +24,19 @@ import de.buseslaar.concerthistory.views.favorites.setlist.SetlistFavorites
 
 @Composable
 fun FavoritesView(
+    initialTab: FavoritesTab,
     onShowArtistDetails: (String) -> Unit,
     onShowConcertDetails: (String) -> Unit
 ) {
     val viewModel = viewModel<FavoritesViewModel>()
     val favoriteSetlists by viewModel.favoriteSetlists.collectAsState(emptyList())
     val favoriteArtists by viewModel.favoriteArtists.collectAsState(emptyList())
+
+    LaunchedEffect(Unit) {
+        viewModel.initialize(
+            initialTab = initialTab
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -59,8 +67,8 @@ fun FavoritesView(
 
 @Composable
 fun FavoritesViewContent(
-    selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit,
+    selectedTabIndex: FavoritesTab,
+    onTabSelected: (FavoritesTab) -> Unit,
     favoriteSetlists: List<Setlist>,
     favoriteArtists: List<Artist>,
     onSetlistRowClick: (String) -> Unit,
@@ -95,8 +103,8 @@ fun FavoritesViewContent(
     Column(modifier = modifier) {
         TabSwitch(
             tabs = elements,
-            selectedTabIndex = selectedTabIndex,
-            onTabSelected = onTabSelected
+            selectedTabIndex = selectedTabIndex.ordinal,
+            onTabSelected = { onTabSelected(FavoritesTab.entries[it]) }
         )
     }
 }
