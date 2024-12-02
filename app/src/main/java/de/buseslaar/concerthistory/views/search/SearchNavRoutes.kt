@@ -24,9 +24,8 @@ fun NavGraphBuilder.addSearchNavGraph(navController: NavHostController) {
                 onShowConcertDetails = { concertId ->
                     navController.navigate(SetlistDetails(setlistId = concertId))
                 },
-
                 onShowArtistDetails = { artistId ->
-                    navController.navigate(ArtistDetails(artistId = artistId))
+                    navController.navigate(ArtistDetails(artistMbId = artistId))
                 }
             )
         }

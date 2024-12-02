@@ -1,8 +1,6 @@
 package de.buseslaar.concerthistory.views.search.artist
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -99,7 +97,7 @@ fun ArtistSearchContent(
                 val isLiked = favorites.any { it.mbid == artist.mbid }
                 ArtistPreview(
                     artist.name,
-                    onRowClick = { onShowDetails(artist.name) },
+                    onRowClick = { onShowDetails(artist.mbid) },
                     isLiked = isLiked,
                     onLikeClick = {
                         if (!isLiked) {

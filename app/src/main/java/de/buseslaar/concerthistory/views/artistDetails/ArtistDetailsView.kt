@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -30,10 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -42,7 +46,7 @@ fun ArtistDetailsView(
     selectedArtistMbId: String,
     navigateBack: () -> Unit
 ) {
-    var viewModel = viewModel<ArtistDetailsViewModel>()
+    val viewModel = viewModel<ArtistDetailsViewModel>()
 
     if (viewModel.isLoading) {
         LoadingIndicator()
@@ -82,6 +86,10 @@ fun ArtistDetailsView(
         ArtistDetailsViewContent(
             artist = viewModel.artist,
             lastConcerts = viewModel.lastConcerts,
+            favoriteSetlists = viewModel.favoriteSetlists,
+            onShowDetails = { },
+            onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
+            onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -92,10 +100,15 @@ fun ArtistDetailsView(
 fun ArtistDetailsViewContent(
     artist: ArtistDto?,
     lastConcerts: List<SetListDto>,
+    favoriteSetlists: Flow<List<Setlist>>,
+    onShowDetails: (String) -> Unit,
+    onLikeConcertClick: (SetListDto) -> Unit = {},
+    onDislikeConcertClick: (SetListDto) -> Unit,
     modifier: Modifier = Modifier,
-    onLikeClick: () -> Unit = {}
 ) {
     val uriHandler = LocalUriHandler.current
+    val favorites by favoriteSetlists.collectAsState(initial = emptyList())
+
     Column(modifier = modifier) {
         ElevatedCard(
             modifier = Modifier
@@ -147,14 +160,29 @@ fun ArtistDetailsViewContent(
                     fontSize = 21.sp,
                 )
                 LazyColumn(userScrollEnabled = false) {
-                    items(lastConcerts.take(10)) { item ->
-                        ConcertPreview(concert = item, onRowClick = {
-                            uriHandler.openUri(item.url)
-                        })
+                    items(lastConcerts.take(10)) { concert ->
+                        val isLiked = favorites.any { it.id == concert.id }
+
+                        with(concert) {
+                            ConcertPreview(
+                                artistName = concert.artist.name,
+                                venueName = venue.name,
+                                venueCity = venue.city.name,
+                                eventDate = eventDate,
+                                onRowClick = { onShowDetails(concert.id) },
+                                isLiked = isLiked,
+                                onLikeClick = {
+                                    if (!isLiked) {
+                                        onLikeConcertClick(concert)
+                                    } else {
+                                        onDislikeConcertClick(concert)
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }
-
         }
     }
 }
