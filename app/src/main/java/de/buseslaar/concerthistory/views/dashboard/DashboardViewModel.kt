@@ -47,4 +47,17 @@ class DashboardViewModel : BaseViewModel() {
     fun isUserNameProvided(): Boolean {
         return userName != null && userName!!.isNotBlank()
     }
+
+    // Statistics
+    fun getTotalConcertsAttended(): Int {
+        return lastAttendedConcerts.size
+    }
+
+    fun getTotalUniqueArtists(): Int {
+        return lastAttendedConcerts.map { it.artist.name }.distinct().count()
+    }
+
+    fun getTotalUniqueLocations(): Int {
+        return lastAttendedConcerts.map { it.venue.name }.distinct().count()
+    }
 }
