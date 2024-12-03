@@ -64,4 +64,7 @@
     <string name="bottomNav_search">Search</string>
     <string name="bottomNav_visited">Visited</string>
     <string name="bottomNav_favorites">Favorites</string>
+    <string name="concerts_attended">Concerts Attended: %1$s</string>
+    <string name="different_artists">Different Artists: %1$s</string>
+    <string name="different_locations">Different Locations: %1$s</string>
 </resources>

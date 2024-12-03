@@ -1,5 +1,6 @@
 package de.buseslaar.concerthistory.views.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -69,9 +71,12 @@ fun DashboardView(
         DashboardContent(
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
+            favoriteArtists = favoriteArtists,
+            totalConcertsAttended = viewModel.getTotalConcertsAttended(),
+            totalUniqueArtists = viewModel.getTotalUniqueArtists(),
+            totalUniqueLocations = viewModel.getTotalUniqueLocations(),
             onShowMoreConcerts = onShowMoreConcerts,
             onShowConcertDetails = onShowConcertDetails,
-            favoriteArtists = favoriteArtists,
             onShowMoreArtists = onShowMoreArtists,
             onShowArtistDetails = onShowArtistDetails,
             modifier = Modifier
@@ -86,6 +91,9 @@ fun DashboardContent(
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
     favoriteArtists: List<Artist>,
+    totalConcertsAttended: Int,
+    totalUniqueArtists: Int,
+    totalUniqueLocations: Int,
     onShowMoreConcerts: () -> Unit,
     onShowConcertDetails: (String) -> Unit,
     onShowMoreArtists: () -> Unit,
@@ -98,7 +106,11 @@ fun DashboardContent(
             modifier = modifier.fillMaxSize()
         ) {
             item {
-                Overview()
+                Overview(
+                    totalConcertsAttended = totalConcertsAttended,
+                    totalUniqueArtists = totalUniqueArtists,
+                    totalUniqueLocations = totalUniqueLocations
+                )
             }
 
             item {
@@ -127,14 +139,28 @@ fun DashboardContent(
 }
 
 @Composable
-private fun Overview() {
+private fun Overview(
+    totalConcertsAttended: Int,
+    totalUniqueArtists: Int,
+    totalUniqueLocations: Int
+) {
     ElevatedCard {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                stringResource(R.string.overview_overview_header),
-                fontSize = 21.sp,
-                modifier = Modifier.padding(16.dp)
-            )
+        Text(
+            stringResource(R.string.overview_overview_header),
+            fontSize = 21.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background)
+                .padding(16.dp)
+        ) {
+            Text(stringResource(R.string.concerts_attended, totalConcertsAttended))
+            Text(stringResource(R.string.different_artists, totalUniqueArtists))
+            Text(stringResource(R.string.different_locations, totalUniqueLocations))
         }
     }
 }
