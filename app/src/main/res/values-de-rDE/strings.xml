@@ -10,7 +10,6 @@
     <string name="setlist_favorites">Deine Favouriten</string>
 
     <!-- Settings -->
-
     <string name="settings_theme">Design</string>
     <string name="settings_dark_theme_header">Dunkles Design</string>
     <string name="settings_dark_theme_system">System Default</string>
@@ -21,14 +20,12 @@
     <string name="settings_about_app_text">Informationen über Concert History</string>
     <string name="settings_about_app_dialog_header">Über die Entwicklung</string>">
     <string name="settings_about_app_dialog_text_1">Concert History ist eine Anwendung, die Benutzern dabei helfen soll, ihre Konzertbesuche zu dokumentieren.</string>
-    <string name="settings_about_app_dialog_text_2">
-        Die App verwendet die API von setlist.fm, aber ist nicht afiliiert zu setlist.fm</string>
+    <string name="settings_about_app_dialog_text_2">Die App verwendet die API von setlist.fm, aber ist nicht afiliiert zu setlist.fm</string>
     <string name="settings_about_dev_header">Über die Entwickler</string>">
     <string name="settings_about_dev_text">Informationen über uns</string>
     <string name="settings_about_dev_dialog_header">Über die Entwicklung</string>">
     <string name="settings_about_dev_dialog_text_1">Concert History wird entwickelt von Niklas Buse und Joshua Slaar.</string>
     <string name="settings_about_dev_dialog_text_2">Initial entstand diese App durch ein Projekt an einer Universität.</string>
-
     <string name="settings_version">Version</string>
     <string name="settings_setlist_header">Setlist Konfiguration</string>
     <string name="settings_setlist_userid">Nutzername</string>
