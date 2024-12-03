@@ -60,4 +60,8 @@
 
     <!-- Artist Details -->
     <string name="artist_details_lastConcerts">Last Concerts</string>
+    <string name="bottomNav_dashboard">Dashboard</string>
+    <string name="bottomNav_search">Search</string>
+    <string name="bottomNav_visited">Visited</string>
+    <string name="bottomNav_favorites">Favorites</string>
 </resources>

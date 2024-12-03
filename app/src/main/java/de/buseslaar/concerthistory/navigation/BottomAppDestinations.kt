@@ -8,16 +8,25 @@ import de.buseslaar.concerthistory.views.visited.VisitedRoot
 
 enum class BottomAppDestinations(
     val route: Any,
-    val label: String,
+    val stringResourceId: Int,
     val activeIcon: Int,
     val inactiveIcon: Int
 ) {
-    BottomDashboard(DashboardRoot, "Dashboard", R.drawable.home_filled, R.drawable.home_outline),
-    BottomSearch(SearchRoot, "Search", R.drawable.search, R.drawable.search),
-    BottomVisited(VisitedRoot, "Visited", R.drawable.visited_filled, R.drawable.visited_outline),
+    BottomDashboard(
+        DashboardRoot,
+        R.string.bottomNav_dashboard, R.drawable.home_filled, R.drawable.home_outline
+    ),
+    BottomSearch(
+        SearchRoot,
+        R.string.bottomNav_search, R.drawable.search, R.drawable.search
+    ),
+    BottomVisited(
+        VisitedRoot,
+        R.string.bottomNav_visited, R.drawable.visited_filled, R.drawable.visited_outline
+    ),
     BottomFavorites(
         FavoritesRoot,
-        "Favorites",
+        R.string.bottomNav_favorites,
         R.drawable.favorite_filled,
         R.drawable.favorite_outline
     ),

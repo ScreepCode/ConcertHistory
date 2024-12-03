@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Concert History</string>
     <string name="desc_back">Zurück</string>
     <string name="desc_show_more">Mehr anzeigen</string>
     <string name="desc_more_menu">Mehr anzeigen Menü</string>
@@ -50,4 +51,8 @@
     <string name="search_artists_title">Künstler</string>
     <string name="searchField_clearText">Text löschen</string>
     <string name="artist_details_lastConcerts">Letzte Konzerte</string>
+    <string name="bottomNav_dashboard">Dashboard</string>
+    <string name="bottomNav_search">Suche</string>
+    <string name="bottomNav_visited">Besucht</string>
+    <string name="bottomNav_favorites">Favoriten</string>
 </resources>
