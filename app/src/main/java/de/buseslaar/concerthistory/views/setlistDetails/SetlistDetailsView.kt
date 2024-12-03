@@ -39,6 +39,8 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.data.remote.dto.SetsDto
 import de.buseslaar.concerthistory.data.remote.dto.SongDto
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.utils.formatEventDate
+import java.time.format.FormatStyle
 import kotlin.reflect.KFunction0
 
 @Composable
@@ -131,7 +133,7 @@ private fun ConcertDetailsCard(
                 Column {
                     Text(text = artistName)
                     Text(text = location)
-                    Text(text = date)
+                    Text(text = formatEventDate(date, FormatStyle.LONG))
                 }
             }
         }

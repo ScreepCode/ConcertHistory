@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -80,7 +81,7 @@ fun MainView(
                         selected = isSelected,
                         onClick = { navController.navigate(item.route) },
                         label = {
-                            Text(item.label)
+                            Text(stringResource(item.stringResourceId))
                         },
                         icon = {
                             Icon(

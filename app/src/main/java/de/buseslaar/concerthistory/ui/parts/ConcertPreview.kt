@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.utils.formatEventDate
 
 @Composable
 fun ConcertPreview(
@@ -43,7 +44,10 @@ fun ConcertPreview(
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     Row(modifier = Modifier.fillMaxHeight()) {
-                        Text(eventDate, modifier = Modifier.padding(8.dp))
+                        Text(
+                            formatEventDate(eventDate),
+                            modifier = Modifier.padding(8.dp)
+                        )
                         onLikeClick?.let {
                             Icon(
                                 painter = if (isLiked) painterResource(R.drawable.favorite_filled) else painterResource(

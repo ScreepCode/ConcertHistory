@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desc_back">Zurück</string>
+    <string name="desc_show_more">Mehr anzeigen</string>
+    <string name="desc_more_menu">Mehr anzeigen Menü</string>
+    <string name="desc_artistPicture">Künsterbild</string>
+    <string name="settings">Einstellungen</string>
+    <string name="visited_concerts">Besuchte Konzerte</string>
+    <string name="setlist_details">Konzertdetails</string>
+    <string name="setlist_favorites">Deine Favouriten</string>
+
+    <!-- Settings -->
+    <string name="settings_theme">Design</string>
+    <string name="settings_dark_theme_header">Dunkles Design</string>
+    <string name="settings_dark_theme_system">System Default</string>
+    <string name="settings_dark_theme_light">Hell</string>
+    <string name="settings_dark_theme_dark">Dunkel</string>
+    <string name="settings_about">About</string>">
+    <string name="settings_about_app_header">Über diese App</string>">
+    <string name="settings_about_app_text">Informationen über Concert History</string>
+    <string name="settings_about_app_dialog_header">Über die Entwicklung</string>">
+    <string name="settings_about_app_dialog_text_1">Concert History ist eine Anwendung, die Benutzern dabei helfen soll, ihre Konzertbesuche zu dokumentieren.</string>
+    <string name="settings_about_app_dialog_text_2">Die App verwendet die API von setlist.fm, aber ist nicht afiliiert zu setlist.fm</string>
+    <string name="settings_about_dev_header">Über die Entwickler</string>">
+    <string name="settings_about_dev_text">Informationen über uns</string>
+    <string name="settings_about_dev_dialog_header">Über die Entwicklung</string>">
+    <string name="settings_about_dev_dialog_text_1">Concert History wird entwickelt von Niklas Buse und Joshua Slaar.</string>
+    <string name="settings_about_dev_dialog_text_2">Initial entstand diese App durch ein Projekt an einer Universität.</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_setlist_header">Setlist Konfiguration</string>
+    <string name="settings_setlist_userid">Nutzername</string>
+    <string name="settings_setlist_username_message">Bitte gebe deinen Setlist.fm Benutzernamen ein</string>
+    <string name="overview_overview_header">Überblick</string>
+    <string name="overview_last_concerts_header">Letzte Konzerte</string>
+    <string name="overview_no_username">Bitte gebe einen Benutzernamen in den Einstellunge an.</string>
+    <string name="overview_favourite_artists_header">Lieblingskünstler</string>
+    <string name="overview_more_menu_settings">Einstellungen öffnen</string>
+    <string name="isLiked">Like</string>
+    <string name="isNotLiked">Not liked</string>
+    <string name="setlist_details_view_on_setlistfm">Auf Setlist.fm anschauen</string>
+    <string name="desc_info">Mehr Informationen</string>
+    <string name="setlist_details_encore">Zugabe</string>
+    <string name="search_title">Suche</string>
+    <string name="search_artists_placeholder">Künstler suchen</string>
+    <string name="search_concert_placeholder">Konzerte suchen</string>
+    <string name="search_concerts_title">Konzerte</string>
+    <string name="search_artists_title">Künstler</string>
+    <string name="searchField_clearText">Text löschen</string>
+    <string name="artist_details_lastConcerts">Letzte Konzerte</string>
+    <string name="bottomNav_dashboard">Dashboard</string>
+    <string name="bottomNav_search">Suche</string>
+    <string name="bottomNav_visited">Besucht</string>
+    <string name="bottomNav_favorites">Favoriten</string>
+</resources>

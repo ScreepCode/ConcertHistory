@@ -14,9 +14,9 @@ plugins {
 val localProperties = readProperties(file("$rootDir/local.properties"))
 
 fun readProperties(propertiesFile: File) = Properties().apply {
-    if(propertiesFile.exists()){
+    if (propertiesFile.exists()) {
         propertiesFile.inputStream().use { fis ->
-                load(fis)
+            load(fis)
         }
     }
 }
@@ -34,6 +34,10 @@ android {
     compileSdk = 35
 
     val version = System.getenv("VERSION_CODE") ?: generateVersion()
+
+    androidResources {
+        generateLocaleConfig = true
+    }
 
     defaultConfig {
         applicationId = "de.buseslaar.concerthistory"
