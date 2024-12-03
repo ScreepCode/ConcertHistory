@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Concert History</string>
+    <string name="app_name" translatable="false">Concert History</string>
 
     <!-- Descriptions -->
     <string name="desc_back">Navigate Back</string>
