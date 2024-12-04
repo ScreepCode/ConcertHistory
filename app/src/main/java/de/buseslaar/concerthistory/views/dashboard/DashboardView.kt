@@ -44,6 +44,7 @@ import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoFavoritesMessage
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoLastConcertsMessage
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoUserView
 
 @Composable
@@ -202,16 +203,24 @@ private fun LastAttendedConcertsPreview(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            lastAttendedConcerts.take(3).forEach { concert ->
-                with(concert) {
-                    ConcertPreview(
-                        artistName = artist.name,
-                        venueName = venue.name,
-                        venueCity = venue.city.name,
-                        eventDate = eventDate,
-                        onRowClick = { onClickDetails(concert.id) }
-                    )
+
+            if (lastAttendedConcerts.isNotEmpty()) {
+                lastAttendedConcerts.take(3).forEach { concert ->
+                    with(concert) {
+                        ConcertPreview(
+                            artistName = artist.name,
+                            venueName = venue.name,
+                            venueCity = venue.city.name,
+                            eventDate = eventDate,
+                            onRowClick = { onClickDetails(concert.id) }
+                        )
+                    }
                 }
+
+            } else {
+                NoLastConcertsMessage(
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+                )
             }
         }
     }
@@ -243,22 +252,21 @@ private fun FavoriteConcertsPreview(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            Crossfade(favoriteArtists.isNotEmpty()) { isNotEmpty ->
-                if (isNotEmpty) {
-                    favoriteArtists.take(3).forEach { artist ->
-                        with(artist) {
-                            ArtistPreview(
-                                name = name,
-                                onRowClick = { onClickDetails(mbid) },
-                            )
-                        }
+
+            if (favoriteArtists.isNotEmpty()) {
+                favoriteArtists.take(3).forEach { artist ->
+                    with(artist) {
+                        ArtistPreview(
+                            name = name,
+                            onRowClick = { onClickDetails(mbid) },
+                        )
                     }
-                } else {
-                    NoFavoritesMessage(
-                        placeholder = stringResource(R.string.search_artists_title),
-                        modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
-                    )
                 }
+            } else {
+                NoFavoritesMessage(
+                    placeholder = stringResource(R.string.search_artists_title),
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+                )
             }
         }
     }

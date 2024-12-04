@@ -77,4 +77,9 @@
     <!-- No Favorites -->
     <string name="no_favorites_title">You have no favorites yet</string>
     <string name="no_favorites_message">Search for %1$s and add them to your favorites</string>
+
+    <!-- No Last concerts -->
+    <string name="no_last_concert_title">You have no concerts marked as visited yet</string>
+    <string name="no_last_concert_message">Go to setlist.fm and search for your visited concerts and click \'I was there\'</string>
+    <string name="no_last_concert_action">Go to setlist.fm search</string>
 </resources>
