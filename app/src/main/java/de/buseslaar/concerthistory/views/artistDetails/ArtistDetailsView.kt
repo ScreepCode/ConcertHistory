@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun ArtistDetailsView(
     selectedArtistMbId: String,
+    onConcertClick: (id: String) -> Unit,
     navigateBack: () -> Unit
 ) {
     val viewModel = viewModel<ArtistDetailsViewModel>()
@@ -66,7 +67,9 @@ fun ArtistDetailsView(
             artist = viewModel.selectedArtist,
             lastConcerts = viewModel.lastConcerts,
             favoriteSetlists = viewModel.favoriteSetlists,
-            onShowDetails = { },
+            onShowDetails = {
+                onConcertClick(it)
+            },
             onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
             onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
             modifier = Modifier.padding(innerPadding),

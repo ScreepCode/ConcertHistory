@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import de.buseslaar.concerthistory.views.setlistDetails.SetlistDetails
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -33,6 +34,9 @@ fun NavGraphBuilder.addArtistDetailsNavGraph(navController: NavHostController) {
                 selectedArtistMbId = args.artistMbId,
                 navigateBack = {
                     navController.popBackStack()
+                },
+                onConcertClick = { concertId ->
+                    navController.navigate(SetlistDetails(setlistId = concertId))
                 }
             )
         }
