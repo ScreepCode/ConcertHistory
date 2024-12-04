@@ -39,6 +39,7 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.ui.parts.NoUserView
 
 @Composable
 fun DashboardView(
@@ -81,7 +82,6 @@ fun DashboardView(
             onShowArtistDetails = onShowArtistDetails,
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 8.dp)
         )
     }
 }
@@ -130,10 +130,8 @@ fun DashboardContent(
             }
         }
     } else {
-        Text(
-            stringResource(R.string.overview_no_username),
-            fontSize = 21.sp,
-            modifier = modifier.padding(16.dp)
+        NoUserView(
+            modifier = modifier
         )
     }
 }
@@ -210,7 +208,7 @@ private fun FavoriteConcertsPreview(
     modifier: Modifier = Modifier
 ) {
     ElevatedCard {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = modifier.fillMaxWidth()) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier

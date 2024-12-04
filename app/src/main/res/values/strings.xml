@@ -67,4 +67,8 @@
     <string name="concerts_attended">Concerts Attended: %1$s</string>
     <string name="different_artists">Different Artists: %1$s</string>
     <string name="different_locations">Different Locations: %1$s</string>
+    <string name="no_username_title">No Username Set in Settings</string>
+    <string name="no_username_request">Please set a setlist.fm username in settings to use the Dashboard and Attended Shows features</string>
+    <string name="no_username_guide">If you don\'t have a setlist.fm account yet, you can create one at setlist.fm. However, it may take a few minutes to hours for newly created accounts to be available via their API</string>
+    <string name="no_username_create_account">Create setlist.fm Account</string>
 </resources>
