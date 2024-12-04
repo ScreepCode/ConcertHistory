@@ -1,6 +1,7 @@
 package de.buseslaar.concerthistory.views.mainView
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -42,6 +43,10 @@ fun MainView(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val isBottomAppDestination = BottomAppDestinations.entries.any { item ->
+        currentDestination?.hierarchy?.any { it.hasRoute(item.route::class) } == true
+    }
+
     val orientation = rememberUpdatedState(LocalConfiguration.current.orientation)
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType = with(adaptiveInfo) {
@@ -52,55 +57,62 @@ fun MainView(
         }
     }
 
-    Box(
-        modifier
-            .fillMaxSize()
-            .then(
-                if (adaptiveInfo.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
-                    Modifier
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .windowInsetsPadding(WindowInsets.statusBars)
-                } else {
-                    Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                }
-            )
-    ) {
-        NavigationSuiteScaffold(
-            navigationSuiteColors = NavigationSuiteDefaults.colors(
-                navigationBarContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                navigationRailContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            ),
-            layoutType = customNavSuiteType,
-            navigationSuiteItems = {
-                BottomAppDestinations.entries.forEach { item ->
-                    val isSelected = currentDestination?.hierarchy?.any {
-                        it.hasRoute(item.route::class)
-                    } == true
+    Crossfade(targetState = isBottomAppDestination) {
+        when (it) {
+            true ->
+                Box(
+                    modifier
+                        .fillMaxSize()
+                        .then(
+                            if (adaptiveInfo.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
+                                Modifier
+                                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                                    .windowInsetsPadding(WindowInsets.statusBars)
+                            } else {
+                                Modifier
+                                    .background(MaterialTheme.colorScheme.surface)
+                            }
+                        )
+                ) {
+                    NavigationSuiteScaffold(
+                        navigationSuiteColors = NavigationSuiteDefaults.colors(
+                            navigationBarContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            navigationRailContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        ),
+                        layoutType = customNavSuiteType,
+                        navigationSuiteItems = {
+                            BottomAppDestinations.entries.forEach { item ->
+                                val isSelected = currentDestination?.hierarchy?.any {
+                                    it.hasRoute(item.route::class)
+                                } == true
 
-                    item(
-                        selected = isSelected,
-                        onClick = { navController.navigateByOverview(item.route) },
-                        label = {
-                            Text(stringResource(item.stringResourceId))
+                                item(
+                                    selected = isSelected,
+                                    onClick = { navController.navigateByOverview(item.route) },
+                                    label = {
+                                        Text(stringResource(item.stringResourceId))
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = if (isSelected) painterResource(item.activeIcon) else painterResource(
+                                                item.inactiveIcon
+                                            ),
+                                            contentDescription = item.toString(),
+                                            modifier = Modifier.size(24.dp)
+                                        )
+                                    },
+                                    modifier = Modifier,
+                                )
+                            }
                         },
-                        icon = {
-                            Icon(
-                                painter = if (isSelected) painterResource(item.activeIcon) else painterResource(
-                                    item.inactiveIcon
-                                ),
-                                contentDescription = item.toString(),
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        modifier = Modifier,
-                    )
+                        modifier = modifier
+                            .windowInsetsPadding(WindowInsets.displayCutout)
+                    ) {
+                        content()
+                    }
                 }
-            },
-            modifier = modifier
-                .windowInsetsPadding(WindowInsets.displayCutout)
-        ) {
-            content()
+
+            false -> content()
         }
     }
 }
