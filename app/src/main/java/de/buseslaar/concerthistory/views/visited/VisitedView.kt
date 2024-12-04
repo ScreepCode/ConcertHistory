@@ -1,5 +1,9 @@
 package de.buseslaar.concerthistory.views.visited
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,6 +48,7 @@ fun VisitedView(
         }
 
         VisitedContent(
+            isLoading = viewModel.isLoading,
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
             favoriteSetlists = viewModel.favoriteSetlists,
@@ -57,6 +62,7 @@ fun VisitedView(
 
 @Composable
 fun VisitedContent(
+    isLoading: Boolean,
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
     favoriteSetlists: Flow<List<Setlist>>,
@@ -66,39 +72,48 @@ fun VisitedContent(
     modifier: Modifier = Modifier
 ) {
     val favorites by favoriteSetlists.collectAsState(initial = emptyList())
-    if (isUserNameProvided) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier
+    AnimatedVisibility(
+        !isLoading,
+        enter = fadeIn(),
+        exit = ExitTransition.None
+    ) {
+        Crossfade(
+            isUserNameProvided
         ) {
-            itemsIndexed(lastAttendedConcerts) { _, concert ->
-                val isLiked = favorites.any { it.id == concert.id }
+            when (it) {
+                true -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = modifier
+                    ) {
+                        itemsIndexed(lastAttendedConcerts) { _, concert ->
+                            val isLiked = favorites.any { it.id == concert.id }
 
-                with(concert) {
-                    ConcertPreview(
-                        artistName = artist.name,
-                        venueName = venue.name,
-                        venueCity = venue.city.name,
-                        eventDate = eventDate,
-                        onRowClick = { onShowDetails(concert.id) },
-                        isLiked = isLiked,
-                        onLikeClick = {
-                            if (!isLiked) {
-                                onLikeClick(concert)
-                            } else {
-                                onDislikeClick(concert)
+                            with(concert) {
+                                ConcertPreview(
+                                    artistName = artist.name,
+                                    venueName = venue.name,
+                                    venueCity = venue.city.name,
+                                    eventDate = eventDate,
+                                    onRowClick = { onShowDetails(concert.id) },
+                                    isLiked = isLiked,
+                                    onLikeClick = {
+                                        if (!isLiked) {
+                                            onLikeClick(concert)
+                                        } else {
+                                            onDislikeClick(concert)
+                                        }
+                                    }
+                                )
                             }
                         }
-                    )
+                    }
                 }
+
+                false -> NoUserView(modifier = modifier)
             }
         }
-    } else {
-        NoUserView(
-            modifier = modifier
-        )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,6 +1,9 @@
 package de.buseslaar.concerthistory.views.dashboard
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -72,6 +75,7 @@ fun DashboardView(
         }
 
         DashboardContent(
+            isLoading = viewModel.isLoading,
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
             favoriteArtists = favoriteArtists,
@@ -90,6 +94,7 @@ fun DashboardView(
 
 @Composable
 fun DashboardContent(
+    isLoading: Boolean,
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
     favoriteArtists: List<Artist>,
@@ -102,39 +107,49 @@ fun DashboardContent(
     onShowArtistDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (isUserNameProvided) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier.fillMaxSize()
+    AnimatedVisibility(
+        !isLoading,
+        enter = fadeIn(),
+        exit = ExitTransition.None
+    ) {
+        Crossfade(
+            isUserNameProvided
         ) {
-            item {
-                Overview(
-                    totalConcertsAttended = totalConcertsAttended,
-                    totalUniqueArtists = totalUniqueArtists,
-                    totalUniqueLocations = totalUniqueLocations
-                )
-            }
+            when (it) {
+                true -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = modifier.fillMaxSize()
+                    ) {
+                        item {
+                            Overview(
+                                totalConcertsAttended = totalConcertsAttended,
+                                totalUniqueArtists = totalUniqueArtists,
+                                totalUniqueLocations = totalUniqueLocations
+                            )
+                        }
 
-            item {
-                LastAttendedConcertsPreview(
-                    lastAttendedConcerts = lastAttendedConcerts,
-                    onClickMore = onShowMoreConcerts,
-                    onClickDetails = onShowConcertDetails,
-                )
-            }
+                        item {
+                            LastAttendedConcertsPreview(
+                                lastAttendedConcerts = lastAttendedConcerts,
+                                onClickMore = onShowMoreConcerts,
+                                onClickDetails = onShowConcertDetails,
+                            )
+                        }
 
-            item {
-                FavoriteConcertsPreview(
-                    favoriteArtists = favoriteArtists,
-                    onClickMore = onShowMoreArtists,
-                    onClickDetails = onShowArtistDetails,
-                )
+                        item {
+                            FavoriteConcertsPreview(
+                                favoriteArtists = favoriteArtists,
+                                onClickMore = onShowMoreArtists,
+                                onClickDetails = onShowArtistDetails,
+                            )
+                        }
+                    }
+                }
+
+                false -> NoUserView(modifier = modifier)
             }
         }
-    } else {
-        NoUserView(
-            modifier = modifier
-        )
     }
 }
 
