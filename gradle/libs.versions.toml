@@ -17,7 +17,7 @@ datastorePreferences = "1.1.1"
 ksp = "2.0.0-1.0.22"
 room = "2.6.1"
 coroutines = "1.9.0"
-coreSplashscreen = "1.0.1"
+coreSplashscreen = "1.2.0-alpha02" # > 1.2.0-alpha01 1.0.1 have a bug regarding splitscreen
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
