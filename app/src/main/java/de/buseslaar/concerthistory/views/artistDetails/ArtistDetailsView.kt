@@ -166,8 +166,8 @@ fun LastConcertsCard(
                     .padding(16.dp),
                 fontSize = 21.sp,
             )
-            LazyColumn(userScrollEnabled = false) {
-                items(lastConcerts.take(10)) { concert ->
+            LazyColumn {
+                items(lastConcerts) { concert ->
                     val isLiked = favorites.any { it.id == concert.id }
 
                     with(concert) {
