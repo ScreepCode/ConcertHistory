@@ -28,7 +28,8 @@ fun NavGraphBuilder.addSetlistDetailsNavGraph(navController: NavHostController) 
         composable<SetlistDetails> {
             val args = it.toRoute<SetlistDetails>()
             SetlistDetailsView(
-                selectedSetlistId = args.setlistId
+                selectedSetlistId = args.setlistId,
+                navigateBack = { navController.popBackStack() }
             )
         }
     }
