@@ -78,6 +78,7 @@ fun SearchView(
             onShowConcertDetails = onShowConcertDetails,
             onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
             onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
+            isLoading = viewModel.isLoading
         )
     }
 }
@@ -117,6 +118,7 @@ fun SearchViewContent(
     onShowArtistDetails: (String) -> Unit,
     onLikeArtistClick: (ArtistDto) -> Unit,
     onDislikeArtistClick: (ArtistDto) -> Unit,
+    isLoading: Boolean
 ) {
     var elements = listOf<TabElement>(
         TabElement(
@@ -133,13 +135,15 @@ fun SearchViewContent(
                     favoriteSetlists = favoriteSetlists,
                     onShowDetails = onShowConcertDetails,
                     onLikeClick = onLikeConcertClick,
-                    onDislikeClick = onDislikeConcertClick
+                    onDislikeClick = onDislikeConcertClick,
+                    isLoading = isLoading
                 )
             }
         ), TabElement(
             label = stringResource(R.string.search_artists_title),
             screen = {
                 ArtistSearch(
+                    isLoading = isLoading,
                     onSearch = { searchArtists() },
                     onValueChange = onArtistSearchTextChange,
                     value = artistSearchText,

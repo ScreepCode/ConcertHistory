@@ -20,6 +20,7 @@ import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
+import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import de.buseslaar.concerthistory.ui.parts.SearchField
 import kotlinx.coroutines.flow.Flow
 
@@ -35,7 +36,9 @@ fun ConcertSearch(
     favoriteSetlists: Flow<List<Setlist>>,
     onShowDetails: (String) -> Unit,
     onLikeClick: (SetListDto) -> Unit,
-    onDislikeClick: (SetListDto) -> Unit
+    onDislikeClick: (SetListDto) -> Unit,
+    isLoading: Boolean
+
 ) {
 
     ConcertSearchContent(
@@ -50,7 +53,8 @@ fun ConcertSearch(
         favoriteSetlists = favoriteSetlists,
         onShowDetails = onShowDetails,
         onLikeClick = onLikeClick,
-        onDislikeClick = onDislikeClick
+        onDislikeClick = onDislikeClick,
+        isLoading = isLoading
     )
 }
 
@@ -67,9 +71,12 @@ fun ConcertSearchContent(
     favoriteSetlists: Flow<List<Setlist>>,
     onShowDetails: (String) -> Unit,
     onLikeClick: (SetListDto) -> Unit,
-    onDislikeClick: (SetListDto) -> Unit
+    onDislikeClick: (SetListDto) -> Unit,
+    isLoading: Boolean
+
 ) {
     val favorites by favoriteSetlists.collectAsState(initial = emptyList())
+
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             modifier = Modifier
@@ -93,6 +100,10 @@ fun ConcertSearchContent(
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
+            if (isLoading) {
+                LoadingIndicator(modifier = Modifier.padding(16.dp))
+            }
+
             AnimatedVisibility(errorMessage.isNotBlank()) {
                 Text(errorMessage)
             }
