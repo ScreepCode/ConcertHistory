@@ -30,6 +30,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.window.core.layout.WindowWidthSizeClass
 import de.buseslaar.concerthistory.navigation.BottomAppDestinations
+import de.buseslaar.concerthistory.navigation.navigateByOverview
 
 @SuppressLint("RestrictedApi")
 @Composable
@@ -79,7 +80,7 @@ fun MainView(
 
                     item(
                         selected = isSelected,
-                        onClick = { navController.navigate(item.route) },
+                        onClick = { navController.navigateByOverview(item.route) },
                         label = {
                             Text(stringResource(item.stringResourceId))
                         },
