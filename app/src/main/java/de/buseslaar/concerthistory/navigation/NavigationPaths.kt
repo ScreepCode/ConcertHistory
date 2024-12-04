@@ -6,6 +6,6 @@ import de.buseslaar.concerthistory.views.dashboard.DashboardOverviewRoute
 fun NavController.navigateByOverview(route: Any) = navigate(route) {
     popBackStack<DashboardOverviewRoute>(
         inclusive = (route == DashboardOverviewRoute),
-        saveState = true
+//        saveState = true
     )
 }

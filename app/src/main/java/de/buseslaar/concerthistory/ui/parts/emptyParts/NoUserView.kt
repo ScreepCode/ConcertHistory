@@ -1,4 +1,4 @@
-package de.buseslaar.concerthistory.ui.parts
+package de.buseslaar.concerthistory.ui.parts.emptyParts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

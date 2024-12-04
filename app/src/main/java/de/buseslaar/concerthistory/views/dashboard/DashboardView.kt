@@ -1,5 +1,9 @@
 package de.buseslaar.concerthistory.views.dashboard
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +43,9 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
-import de.buseslaar.concerthistory.ui.parts.NoUserView
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoFavoritesMessage
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoLastConcertsMessage
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoUserView
 
 @Composable
 fun DashboardView(
@@ -70,6 +76,7 @@ fun DashboardView(
         }
 
         DashboardContent(
+            isLoading = viewModel.isLoading,
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
             favoriteArtists = favoriteArtists,
@@ -88,6 +95,7 @@ fun DashboardView(
 
 @Composable
 fun DashboardContent(
+    isLoading: Boolean,
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
     favoriteArtists: List<Artist>,
@@ -100,39 +108,49 @@ fun DashboardContent(
     onShowArtistDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (isUserNameProvided) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier.fillMaxSize()
+    AnimatedVisibility(
+        !isLoading,
+        enter = fadeIn(),
+        exit = ExitTransition.None
+    ) {
+        Crossfade(
+            isUserNameProvided
         ) {
-            item {
-                Overview(
-                    totalConcertsAttended = totalConcertsAttended,
-                    totalUniqueArtists = totalUniqueArtists,
-                    totalUniqueLocations = totalUniqueLocations
-                )
-            }
+            when (it) {
+                true -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = modifier.fillMaxSize()
+                    ) {
+                        item {
+                            Overview(
+                                totalConcertsAttended = totalConcertsAttended,
+                                totalUniqueArtists = totalUniqueArtists,
+                                totalUniqueLocations = totalUniqueLocations
+                            )
+                        }
 
-            item {
-                LastAttendedConcertsPreview(
-                    lastAttendedConcerts = lastAttendedConcerts,
-                    onClickMore = onShowMoreConcerts,
-                    onClickDetails = onShowConcertDetails,
-                )
-            }
+                        item {
+                            LastAttendedConcertsPreview(
+                                lastAttendedConcerts = lastAttendedConcerts,
+                                onClickMore = onShowMoreConcerts,
+                                onClickDetails = onShowConcertDetails,
+                            )
+                        }
 
-            item {
-                FavoriteConcertsPreview(
-                    favoriteArtists = favoriteArtists,
-                    onClickMore = onShowMoreArtists,
-                    onClickDetails = onShowArtistDetails,
-                )
+                        item {
+                            FavoriteConcertsPreview(
+                                favoriteArtists = favoriteArtists,
+                                onClickMore = onShowMoreArtists,
+                                onClickDetails = onShowArtistDetails,
+                            )
+                        }
+                    }
+                }
+
+                false -> NoUserView(modifier = modifier)
             }
         }
-    } else {
-        NoUserView(
-            modifier = modifier
-        )
     }
 }
 
@@ -185,16 +203,24 @@ private fun LastAttendedConcertsPreview(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            lastAttendedConcerts.take(3).forEach { concert ->
-                with(concert) {
-                    ConcertPreview(
-                        artistName = artist.name,
-                        venueName = venue.name,
-                        venueCity = venue.city.name,
-                        eventDate = eventDate,
-                        onRowClick = { onClickDetails(concert.id) }
-                    )
+
+            if (lastAttendedConcerts.isNotEmpty()) {
+                lastAttendedConcerts.take(3).forEach { concert ->
+                    with(concert) {
+                        ConcertPreview(
+                            artistName = artist.name,
+                            venueName = venue.name,
+                            venueCity = venue.city.name,
+                            eventDate = eventDate,
+                            onRowClick = { onClickDetails(concert.id) }
+                        )
+                    }
                 }
+
+            } else {
+                NoLastConcertsMessage(
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+                )
             }
         }
     }
@@ -226,13 +252,21 @@ private fun FavoriteConcertsPreview(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            favoriteArtists.take(3).forEach { artist ->
-                with(artist) {
-                    ArtistPreview(
-                        name = name,
-                        onRowClick = { onClickDetails(mbid) },
-                    )
+
+            if (favoriteArtists.isNotEmpty()) {
+                favoriteArtists.take(3).forEach { artist ->
+                    with(artist) {
+                        ArtistPreview(
+                            name = name,
+                            onRowClick = { onClickDetails(mbid) },
+                        )
+                    }
                 }
+            } else {
+                NoFavoritesMessage(
+                    placeholder = stringResource(R.string.search_artists_title),
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+                )
             }
         }
     }

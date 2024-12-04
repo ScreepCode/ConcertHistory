@@ -58,4 +58,9 @@
     <string name="no_username_request">Bitte gebe in den Einstellungen einen setlist.fm Nutzernamen an, um die Funktionen Dashboard und Besuchte Konzerte zu verwenden</string>
     <string name="no_username_guide">Wenn du noch keinen setlist.fm Account hast, kannst du dir einen auf setlist.fm erstellen. Es kann jedoch einige Minuten bis Stunden dauern, bis neu erstellte Accounts über deren API zur Verfügung stehen</string>
     <string name="no_username_create_account">setlist.fm Account erstellen</string>
+    <string name="no_favorites_title">Du hast bisher keine Favoriten gesetzt</string>
+    <string name="no_favorites_message">Suche nach %1$s und füge sie deinen Favoriten hinzu</string>
+    <string name="no_last_concert_title">Du hast noch keine Konzerte als besucht markiert</string>
+    <string name="no_last_concert_message">Gehe zu setlist.fm, suche nach deinen besuchten Konzerten und klicke auf \\\'Ich war dabei\\\'</string>
+    <string name="no_last_concert_action">Zur setlist.fm Suche</string>
 </resources>
