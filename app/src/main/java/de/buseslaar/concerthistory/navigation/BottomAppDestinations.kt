@@ -1,7 +1,7 @@
 package de.buseslaar.concerthistory.navigation
 
 import de.buseslaar.concerthistory.R
-import de.buseslaar.concerthistory.views.dashboard.DashboardRoot
+import de.buseslaar.concerthistory.views.dashboard.DashboardOverviewRoute
 import de.buseslaar.concerthistory.views.favorites.FavoritesRoot
 import de.buseslaar.concerthistory.views.search.SearchRoot
 import de.buseslaar.concerthistory.views.visited.VisitedRoot
@@ -13,7 +13,7 @@ enum class BottomAppDestinations(
     val inactiveIcon: Int
 ) {
     BottomDashboard(
-        DashboardRoot,
+        DashboardOverviewRoute,
         R.string.bottomNav_dashboard, R.drawable.home_filled, R.drawable.home_outline
     ),
     BottomSearch(
