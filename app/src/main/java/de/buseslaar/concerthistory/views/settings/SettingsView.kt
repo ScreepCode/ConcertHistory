@@ -35,7 +35,6 @@ import de.buseslaar.concerthistory.ui.parts.textDialog.TextDialog
 import de.buseslaar.concerthistory.ui.parts.textDialog.TextDialogInfo
 import de.buseslaar.concerthistory.ui.theme.ThemeMode
 
-// TODO: This should be a full screen dialog
 @Composable
 fun SettingsView(
     onBack: () -> Unit
