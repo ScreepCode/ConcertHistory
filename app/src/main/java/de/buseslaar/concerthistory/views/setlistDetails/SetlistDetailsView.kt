@@ -1,6 +1,7 @@
 package de.buseslaar.concerthistory.views.setlistDetails
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,6 +48,7 @@ import kotlin.reflect.KFunction0
 @Composable
 fun SetlistDetailsView(
     selectedSetlistId: String,
+    onArtistClick: (String) -> Unit,
     navigateBack: () -> Unit
 ) {
     val viewModel = viewModel<SetlistDetailsViewModel>()
@@ -75,7 +77,10 @@ fun SetlistDetailsView(
 
         SetlistDetailsContent(
             selectedSetlist = selectedSetlist,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            onArtistClick = {
+                onArtistClick(it)
+            }
         )
     }
 }
@@ -83,6 +88,7 @@ fun SetlistDetailsView(
 @Composable
 fun SetlistDetailsContent(
     selectedSetlist: SetListDto?,
+    onArtistClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     selectedSetlist?.let {
@@ -92,6 +98,8 @@ fun SetlistDetailsContent(
             item {
                 ConcertDetailsCard(
                     artistName = selectedSetlist.artist.name,
+                    artistMbid = selectedSetlist.artist.mbid,
+                    onArtistClick = onArtistClick,
                     location = "${selectedSetlist.venue.name}, ${selectedSetlist.venue.city.name}",
                     date = selectedSetlist.eventDate,
                 )
@@ -112,6 +120,8 @@ fun SetlistDetailsContent(
 @Composable
 private fun ConcertDetailsCard(
     artistName: String,
+    artistMbid: String,
+    onArtistClick: (String) -> Unit,
     location: String,
     date: String,
     modifier: Modifier = Modifier
@@ -131,7 +141,11 @@ private fun ConcertDetailsCard(
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clickable {
+                            onArtistClick(artistMbid)
+                        }
                 )
                 Column {
                     Text(text = artistName)
