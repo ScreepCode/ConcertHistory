@@ -33,4 +33,16 @@ class FavoritesViewModel : BaseViewModel() {
             artistFavoritesRepository.delete(artist)
         }
     }
+
+    fun removeAllConcertsFromFavorites() {
+        asyncRequest {
+            setlistFavoritesRepository.deleteAll()
+        }
+    }
+
+    fun removeAllArtistsFromFavorites() {
+        asyncRequest {
+            artistFavoritesRepository.deleteAll()
+        }
+    }
 }

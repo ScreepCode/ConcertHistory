@@ -63,4 +63,5 @@
     <string name="no_last_concert_title">Du hast noch keine Konzerte als besucht markiert</string>
     <string name="no_last_concert_message">Gehe zu setlist.fm, suche nach deinen besuchten Konzerten und klicke auf \\\'Ich war dabei\\\'</string>
     <string name="no_last_concert_action">Zur setlist.fm Suche</string>
+    <string name="favorites_delete_all">Lösche alle %1$s Favoriten</string>
 </resources>
