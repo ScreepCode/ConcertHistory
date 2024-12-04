@@ -21,7 +21,7 @@ import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
-import de.buseslaar.concerthistory.ui.parts.NoUserView
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoUserView
 import kotlinx.coroutines.flow.Flow
 
 @Composable

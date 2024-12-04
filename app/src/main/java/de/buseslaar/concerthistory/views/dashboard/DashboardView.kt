@@ -1,5 +1,6 @@
 package de.buseslaar.concerthistory.views.dashboard
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +40,8 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
-import de.buseslaar.concerthistory.ui.parts.NoUserView
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoFavoritesMessage
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoUserView
 
 @Composable
 fun DashboardView(
@@ -226,11 +228,20 @@ private fun FavoriteConcertsPreview(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            favoriteArtists.take(3).forEach { artist ->
-                with(artist) {
-                    ArtistPreview(
-                        name = name,
-                        onRowClick = { onClickDetails(mbid) },
+            Crossfade(favoriteArtists.isNotEmpty()) { isNotEmpty ->
+                if (isNotEmpty) {
+                    favoriteArtists.take(3).forEach { artist ->
+                        with(artist) {
+                            ArtistPreview(
+                                name = name,
+                                onRowClick = { onClickDetails(mbid) },
+                            )
+                        }
+                    }
+                } else {
+                    NoFavoritesMessage(
+                        placeholder = stringResource(R.string.search_artists_title),
+                        modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
                     )
                 }
             }
