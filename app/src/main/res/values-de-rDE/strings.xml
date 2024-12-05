@@ -64,4 +64,12 @@
     <string name="no_last_concert_message">Gehe zu setlist.fm, suche nach deinen besuchten Konzerten und klicke auf \\\'Ich war dabei\\\'</string>
     <string name="no_last_concert_action">Zur setlist.fm Suche</string>
     <string name="favorites_delete_all">Lösche alle %1$s Favoriten</string>
+    <string name="no_concerts_from_artist_title">Keine Konzerte gefunden</string>
+    <string name="search_no_results_found">Keine Ergebnisse gefunden</string>
+    <string name="search_internal_server_error">Interner Server Fehler</string>
+    <string name="search_unknown_error">Es ist ein unbekannter Fehler aufgetreten</string>
+    <string name="no_internet_title">Keine Internetverbindung möglich. Bitte überprüfe deine Netzwerkeinstellungen</string>
+    <string name="setlist_not_found">Konzert wurde nicht gefunden</string>
+    <string name="setlist_no_sets">Kein Set vorhanden in diesem Konzert</string>
+    <string name="setlist_empty_set">Dieses Set ist leer.</string>
 </resources>

@@ -25,6 +25,7 @@ import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoConnectionView
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoLastConcertsView
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoUserView
 import kotlinx.coroutines.flow.Flow
@@ -50,6 +51,7 @@ fun VisitedView(
 
         VisitedContent(
             isLoading = viewModel.isLoading,
+            isInternetConnected = viewModel.isConnected(),
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
             favoriteSetlists = viewModel.favoriteSetlists,
@@ -64,6 +66,7 @@ fun VisitedView(
 @Composable
 fun VisitedContent(
     isLoading: Boolean,
+    isInternetConnected: Boolean,
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
     favoriteSetlists: Flow<List<Setlist>>,
@@ -83,40 +86,51 @@ fun VisitedContent(
         ) {
             when (it) {
                 true -> {
-                    Crossfade(
-                        lastAttendedConcerts.isNotEmpty()
-                    ) { isNotEmpty ->
-                        when (isNotEmpty) {
+                    Crossfade(isInternetConnected) { connected ->
+                        when (connected) {
                             true -> {
-                                LazyColumn(
-                                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                                    modifier = modifier
-                                ) {
-                                    itemsIndexed(lastAttendedConcerts) { _, concert ->
-                                        val isLiked = favorites.any { it.id == concert.id }
+                                Crossfade(
+                                    lastAttendedConcerts.isNotEmpty()
+                                ) { isNotEmpty ->
+                                    when (isNotEmpty) {
+                                        true -> {
+                                            LazyColumn(
+                                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                                modifier = modifier
+                                            ) {
+                                                itemsIndexed(lastAttendedConcerts) { _, concert ->
+                                                    val isLiked =
+                                                        favorites.any { it.id == concert.id }
 
-                                        with(concert) {
-                                            ConcertPreview(
-                                                artistName = artist.name,
-                                                venueName = venue.name,
-                                                venueCity = venue.city.name,
-                                                eventDate = eventDate,
-                                                onRowClick = { onShowDetails(concert.id) },
-                                                isLiked = isLiked,
-                                                onLikeClick = {
-                                                    if (!isLiked) {
-                                                        onLikeClick(concert)
-                                                    } else {
-                                                        onDislikeClick(concert)
+                                                    with(concert) {
+                                                        ConcertPreview(
+                                                            artistName = artist.name,
+                                                            venueName = venue.name,
+                                                            venueCity = venue.city.name,
+                                                            eventDate = eventDate,
+                                                            onRowClick = { onShowDetails(concert.id) },
+                                                            isLiked = isLiked,
+                                                            onLikeClick = {
+                                                                if (!isLiked) {
+                                                                    onLikeClick(concert)
+                                                                } else {
+                                                                    onDislikeClick(concert)
+                                                                }
+                                                            }
+                                                        )
                                                     }
                                                 }
-                                            )
+                                            }
                                         }
+
+                                        false -> NoLastConcertsView(modifier = modifier)
                                     }
                                 }
                             }
 
-                            false -> NoLastConcertsView(modifier = modifier)
+                            false -> {
+                                NoConnectionView(modifier = modifier)
+                            }
                         }
                     }
                 }

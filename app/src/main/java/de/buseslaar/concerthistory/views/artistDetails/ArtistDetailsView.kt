@@ -36,6 +36,7 @@ import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoConcertsFromArtist
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -70,6 +71,7 @@ fun ArtistDetailsView(
             onShowDetails = {
                 onConcertClick(it)
             },
+            isLoading = viewModel.isLoading,
             onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
             onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
             modifier = Modifier.padding(innerPadding),
@@ -81,6 +83,7 @@ fun ArtistDetailsView(
 @Composable
 fun ArtistDetailsViewContent(
     artist: ArtistDto?,
+    isLoading: Boolean,
     lastConcerts: List<SetListDto>,
     favoriteSetlists: Flow<List<Setlist>>,
     onShowDetails: (String) -> Unit,
@@ -95,7 +98,8 @@ fun ArtistDetailsViewContent(
             favoriteSetlists = favoriteSetlists,
             onShowDetails = onShowDetails,
             onLikeConcertClick = onLikeConcertClick,
-            onDislikeConcertClick = onDislikeConcertClick
+            onDislikeConcertClick = onDislikeConcertClick,
+            isLoading = isLoading
         )
     }
 }
@@ -153,6 +157,7 @@ fun LastConcertsCard(
     onShowDetails: (String) -> Unit,
     onLikeConcertClick: (SetListDto) -> Unit,
     onDislikeConcertClick: (SetListDto) -> Unit,
+    isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
     val favorites by favoriteSetlists.collectAsState(initial = emptyList())
@@ -166,6 +171,9 @@ fun LastConcertsCard(
                     .padding(16.dp),
                 fontSize = 21.sp,
             )
+            if (lastConcerts.isEmpty() && !isLoading) {
+                NoConcertsFromArtist()
+            }
             LazyColumn {
                 items(lastConcerts) { concert ->
                     val isLiked = favorites.any { it.id == concert.id }

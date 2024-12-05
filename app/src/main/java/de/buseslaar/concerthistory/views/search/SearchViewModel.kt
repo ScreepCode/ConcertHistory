@@ -52,8 +52,8 @@ class SearchViewModel : BaseViewModel() {
         tabIndex = initialTab
 
         if (!isConnected()) {
-            concertErrorMessage = R.string.search_connection_timeout
-            artistErrorMessage = R.string.search_connection_timeout
+            concertErrorMessage = R.string.no_internet_title
+            artistErrorMessage = R.string.no_internet_title
         }
     }
 
@@ -119,17 +119,17 @@ class SearchViewModel : BaseViewModel() {
     }
 
     private fun getErrorCode(json: String): Int {
-        try {
-            return Json.decodeFromString<JsonObject>(json).jsonObject["code"]?.jsonPrimitive?.int
+        return try {
+            Json.decodeFromString<JsonObject>(json).jsonObject["code"]?.jsonPrimitive?.int
                 ?: 0
         } catch (_: Exception) {
-            return 0
+            0
         }
     }
 
     private fun isConnected(): Boolean {
         return (AppContextHolder.getInstance().getApplicationContext()
-            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo != null
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetwork != null
     }
 
     private fun parseErrorCode(code: Int): Int {
