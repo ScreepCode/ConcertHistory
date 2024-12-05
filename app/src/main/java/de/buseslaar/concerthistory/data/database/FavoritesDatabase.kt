@@ -9,7 +9,7 @@ import de.buseslaar.concerthistory.data.database.entity.Setlist
 
 @Database(
     entities = [Artist::class, Setlist::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class FavoritesDatabase : RoomDatabase() {

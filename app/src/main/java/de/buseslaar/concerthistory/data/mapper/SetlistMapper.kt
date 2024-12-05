@@ -14,5 +14,6 @@ fun SetListDto.reduceToEntity(isFavorite: Boolean = false): Setlist =
         venueName = venue.name,
         venueCity = venue.city.name,
         eventDate = eventDate,
-        lastUpdated = lastUpdated
+        lastUpdated = lastUpdated,
+        url = url
     )

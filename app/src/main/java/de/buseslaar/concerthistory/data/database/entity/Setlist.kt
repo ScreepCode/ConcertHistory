@@ -46,4 +46,7 @@ data class Setlist(
 
     @ColumnInfo(name = "lastUpdated")
     val lastUpdated: String,
+
+    @ColumnInfo(name = "url")
+    val url: String
 )
