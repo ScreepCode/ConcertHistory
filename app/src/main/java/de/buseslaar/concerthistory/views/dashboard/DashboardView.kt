@@ -123,7 +123,9 @@ fun DashboardContent(
                 true -> {
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = modifier.fillMaxSize()
+                        modifier = modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
                     ) {
                         item {
                             Overview(
@@ -237,9 +239,8 @@ private fun LastAttendedConcertsPreview(
                     )
                 } else {
                     NoLastConcertsMessage(
-                        modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-
-                        )
+                        modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+                    )
                 }
             }
         }
