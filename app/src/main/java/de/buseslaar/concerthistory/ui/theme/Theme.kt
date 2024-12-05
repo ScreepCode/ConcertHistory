@@ -1,5 +1,6 @@
 package de.buseslaar.concerthistory.ui.theme
 
+import AppContextHolder
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -11,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
-import de.buseslaar.concerthistory.utils.extensions.findActivity
 
 enum class ThemeMode {
     SYSTEM,
@@ -73,7 +73,7 @@ fun ConcertHistoryTheme(
 fun SetStatusBarStyle(isColorSchemeLight: Boolean) {
     val view = LocalView.current
     SideEffect {
-        val window = view.context.findActivity()?.window
+        val window = AppContextHolder.getInstance().getActiveActivity().window
         val windowInsetsController = window?.let { WindowCompat.getInsetsController(it, view) }
         if (windowInsetsController != null) {
             windowInsetsController.isAppearanceLightStatusBars = isColorSchemeLight
