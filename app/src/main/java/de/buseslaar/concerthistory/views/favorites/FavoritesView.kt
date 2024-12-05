@@ -60,6 +60,12 @@ fun FavoritesView(
             onDislikeArtistClick = {
                 viewModel.removeArtistFromFavorites(it)
             },
+            onDeleteAllSetlists = {
+                viewModel.removeAllConcertsFromFavorites()
+            },
+            onDeleteAllArtists = {
+                viewModel.removeAllArtistsFromFavorites()
+            },
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -75,6 +81,8 @@ fun FavoritesViewContent(
     onArtistRowClick: (String) -> Unit,
     onDislikeSetlistClick: (Setlist) -> Unit,
     onDislikeArtistClick: (Artist) -> Unit,
+    onDeleteAllSetlists: () -> Unit,
+    onDeleteAllArtists: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val elements = listOf(
@@ -85,6 +93,7 @@ fun FavoritesViewContent(
                     favoriteSetlists = favoriteSetlists,
                     onRowClick = onSetlistRowClick,
                     onDislikeClick = { onDislikeSetlistClick(it) },
+                    onDeleteAll = onDeleteAllSetlists,
                 )
             }
         ),
@@ -95,6 +104,7 @@ fun FavoritesViewContent(
                     favoriteArtists = favoriteArtists,
                     onRowClick = onArtistRowClick,
                     onDislikeClick = { onDislikeArtistClick(it) },
+                    onDeleteAll = onDeleteAllArtists,
                 )
             }
         ),
