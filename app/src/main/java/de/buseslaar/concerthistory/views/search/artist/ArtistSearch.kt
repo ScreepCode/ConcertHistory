@@ -19,6 +19,7 @@ import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.database.entity.Artist
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.ui.parts.ArtistPreview
+import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import de.buseslaar.concerthistory.ui.parts.SearchField
 import kotlinx.coroutines.flow.Flow
 
@@ -35,7 +36,8 @@ fun ArtistSearch(
     favoriteArtists: Flow<List<Artist>>,
     onShowDetails: (String) -> Unit,
     onLikeClick: (ArtistDto) -> Unit,
-    onDislikeClick: (ArtistDto) -> Unit
+    onDislikeClick: (ArtistDto) -> Unit,
+    isLoading: Boolean
 ) {
 
     ArtistSearchContent(
@@ -50,7 +52,8 @@ fun ArtistSearch(
         favoriteArtists = favoriteArtists,
         onShowDetails = onShowDetails,
         onLikeClick = onLikeClick,
-        onDislikeClick = onDislikeClick
+        onDislikeClick = onDislikeClick,
+        isLoading = isLoading
     )
 }
 
@@ -69,6 +72,7 @@ fun ArtistSearchContent(
     onShowDetails: (String) -> Unit,
     onLikeClick: (ArtistDto) -> Unit,
     onDislikeClick: (ArtistDto) -> Unit,
+    isLoading: Boolean,
 ) {
     val favorites by favoriteArtists.collectAsState(initial = emptyList())
     Column {
@@ -86,6 +90,9 @@ fun ArtistSearchContent(
                 textFieldFocused = textFieldFocused,
                 onTextFieldFocusedChange = onTextFieldFocusedChange
             )
+        }
+        if (isLoading) {
+            LoadingIndicator(modifier = Modifier.padding(16.dp))
         }
 
         AnimatedVisibility(errorMessage.isNotBlank()) {
