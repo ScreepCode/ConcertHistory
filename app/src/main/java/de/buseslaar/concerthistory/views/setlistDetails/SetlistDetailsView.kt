@@ -42,6 +42,7 @@ import de.buseslaar.concerthistory.data.remote.dto.SetsDto
 import de.buseslaar.concerthistory.data.remote.dto.SongDto
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import de.buseslaar.concerthistory.ui.parts.emptyParts.EmptySet
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoConnectionView
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoSetlistFound
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NotSetsMessage
 import de.buseslaar.concerthistory.utils.formatEventDate
@@ -78,14 +79,18 @@ fun SetlistDetailsView(
             LoadingIndicator(modifier = Modifier.padding(innerPadding))
         }
 
-        SetlistDetailsContent(
-            selectedSetlist = selectedSetlist,
-            modifier = Modifier.padding(innerPadding),
-            onArtistClick = {
-                onArtistClick(it)
-            },
-            isLoading = viewModel.isLoading
-        )
+        if (!viewModel.isConnected()) {
+            NoConnectionView()
+        } else {
+            SetlistDetailsContent(
+                selectedSetlist = selectedSetlist,
+                modifier = Modifier.padding(innerPadding),
+                onArtistClick = {
+                    onArtistClick(it)
+                },
+                isLoading = viewModel.isLoading
+            )
+        }
     }
 }
 
