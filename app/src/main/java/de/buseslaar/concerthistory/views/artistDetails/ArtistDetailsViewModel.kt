@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.database.repository.ArtistRepository
 import de.buseslaar.concerthistory.data.database.repository.SetlistRepository
-import de.buseslaar.concerthistory.data.mapper.reduceToEntity
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.data.remote.service.ArtistService
@@ -29,34 +28,34 @@ class ArtistDetailsViewModel : BaseViewModel() {
             selectedArtist = artistService.getArtist(artistMbId)
             lastConcerts = artistService.getLastConcerts(artistMbId).setlists
 
-            isLiked = artistFavoritesRepository.getArtistByMbid(artistMbId) != null
+            isLiked = artistFavoritesRepository.getArtistByMbid(artistMbId)?.isFavorite == true
         }
     }
 
     fun addConcertToFavorites(setListDto: SetListDto) {
         asyncRequest {
-            setlistFavoritesRepository.insert(setListDto.reduceToEntity())
+            setlistFavoritesRepository.insert(setListDto, isFavoriteConcert = true)
         }
     }
 
     fun removeConcertFromFavorites(setlistDto: SetListDto) {
         asyncRequest {
             setlistFavoritesRepository.getSetlistById(setlistDto.id)?.let {
-                setlistFavoritesRepository.delete(it)
+                setlistFavoritesRepository.unfavorite(it)
             }
         }
     }
 
     private fun addArtistToFavorites(artist: ArtistDto) {
         asyncRequest {
-            artistFavoritesRepository.insert(artist.reduceToEntity())
+            artistFavoritesRepository.insertOrUpdateFavorite(artist, isFavoriteArtist = true)
         }
     }
 
     private fun removeArtistFromFavorites(artist: ArtistDto) {
         asyncRequest {
             artistFavoritesRepository.getArtistByMbid(artist.mbid)?.let {
-                artistFavoritesRepository.delete(it)
+                artistFavoritesRepository.unfavorite(it)
             }
         }
     }

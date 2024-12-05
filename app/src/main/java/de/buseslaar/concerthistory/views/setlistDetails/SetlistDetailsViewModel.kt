@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.buseslaar.concerthistory.data.database.repository.SetlistRepository
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
-import de.buseslaar.concerthistory.data.mapper.reduceToEntity
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.data.remote.service.SetlistService
 import de.buseslaar.concerthistory.utils.BaseViewModel
@@ -47,14 +46,14 @@ class SetlistDetailsViewModel : BaseViewModel() {
 
     private fun addConcertToFavorites() {
         asyncRequest {
-            favoritesRepository.insert(selectedSetlist!!.reduceToEntity())
+            favoritesRepository.insert(selectedSetlist!!, isFavoriteConcert = true)
         }
     }
 
     private fun removeConcertFromFavorites() {
         asyncRequest {
             favoritesRepository.getSetlistById(selectedSetlist!!.id)?.let {
-                favoritesRepository.delete(it)
+                favoritesRepository.unfavorite(it)
             }
         }
     }

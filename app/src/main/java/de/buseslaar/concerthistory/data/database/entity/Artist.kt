@@ -9,6 +9,12 @@ data class Artist(
     @PrimaryKey
     val mbid: String,
 
+    @ColumnInfo(name = "isFavorite")
+    val isFavorite: Boolean,
+
+    @ColumnInfo(name = "addedToDatabaseTimestamp")
+    val addedToDatabaseTimestamp: Long = System.currentTimeMillis(),
+
     @ColumnInfo(name = "name")
     val name: String,
 

@@ -176,7 +176,7 @@ fun LastConcertsCard(
             }
             LazyColumn {
                 items(lastConcerts) { concert ->
-                    val isLiked = favorites.any { it.id == concert.id }
+                    val isLiked = favorites.any { it.setlistId == concert.id }
 
                     with(concert) {
                         ConcertPreview(

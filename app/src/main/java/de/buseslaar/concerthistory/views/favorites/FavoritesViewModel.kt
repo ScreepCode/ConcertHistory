@@ -24,25 +24,25 @@ class FavoritesViewModel : BaseViewModel() {
 
     fun removeConcertFromFavorites(setlist: Setlist) {
         asyncRequest {
-            setlistFavoritesRepository.delete(setlist)
+            setlistFavoritesRepository.unfavorite(setlist)
         }
     }
 
     fun removeArtistFromFavorites(artist: Artist) {
         asyncRequest {
-            artistFavoritesRepository.delete(artist)
+            artistFavoritesRepository.unfavorite(artist)
         }
     }
 
     fun removeAllConcertsFromFavorites() {
         asyncRequest {
-            setlistFavoritesRepository.deleteAll()
+            setlistFavoritesRepository.unfavoriteAll()
         }
     }
 
     fun removeAllArtistsFromFavorites() {
         asyncRequest {
-            artistFavoritesRepository.deleteAll()
+            artistFavoritesRepository.unfavoriteAll()
         }
     }
 }
