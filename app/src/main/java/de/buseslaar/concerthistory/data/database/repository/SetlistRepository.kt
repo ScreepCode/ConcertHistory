@@ -27,6 +27,15 @@ class SetlistRepository {
             artistDao.insert(insertSetlist.artist.reduceToEntity(isFavorite = false))
         }
 
+        if (allSetlists.contains(insertSetlist).not()) {
+            val existingSetlist = setlistDao.getSetlistById(insertSetlist.id)
+            if (existingSetlist != null) {
+                setlistDao.update(insertSetlist.reduceToEntity(isFavorite = isFavoriteConcert))
+            } else {
+                setlistDao.insert(insertSetlist.reduceToEntity(isFavorite = isFavoriteConcert))
+            }
+        }
+
         for (setlist in allSetlists) {
             val existingSetlist = setlistDao.getSetlistById(setlist.id)
             if (existingSetlist != null && insertSetlist.id == setlist.id) {
@@ -56,13 +65,5 @@ class SetlistRepository {
                 }
             }
         }
-    }
-
-    suspend fun delete(setlist: Setlist) {
-        setlistDao.delete(setlist)
-    }
-
-    suspend fun deleteAll() {
-        setlistDao.deleteAll()
     }
 }
