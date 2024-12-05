@@ -30,7 +30,7 @@ class FavoritesViewModel : BaseViewModel() {
 
     fun removeArtistFromFavorites(artist: Artist) {
         asyncRequest {
-            artistFavoritesRepository.unfavorite(artist)
+            artistFavoritesRepository.unfavorite(artist.mbid)
         }
     }
 

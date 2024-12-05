@@ -11,7 +11,6 @@ class ArtistRepository() {
     private val artistDao = FavoritesDatabaseProvider.getInstance().artistDao
     private val setlistDao = FavoritesDatabaseProvider.getInstance().setlistDao
 
-    val savedArtists: Flow<List<Artist>> = artistDao.getAll()
     val favoriteArtists: Flow<List<Artist>> = artistDao.getAllFavorites()
 
     suspend fun getArtistByMbid(mbid: String): Artist? {
@@ -23,8 +22,8 @@ class ArtistRepository() {
         artistDao.insert(artistEntity)
     }
 
-    suspend fun updateFavorite(artistDto: ArtistDto, isFavoriteArtist: Boolean) {
-        val existingArtist = artistDao.getArtistById(artistDto.mbid)
+    suspend fun updateFavorite(artistId: String, isFavoriteArtist: Boolean) {
+        val existingArtist = artistDao.getArtistById(artistId)
         existingArtist?.let {
             val updatedArtistEntity = existingArtist.copy(isFavorite = isFavoriteArtist)
             artistDao.update(updatedArtistEntity)
@@ -53,14 +52,12 @@ class ArtistRepository() {
         }
     }
 
-    suspend fun delete(artist: Artist) {
-        artistDao.delete(artist)
-    }
-
-    suspend fun unfavorite(artist: Artist) {
-        artistDao.update(artist.copy(isFavorite = false))
-        if (artistDao.hasNoFavoriteSetlists(artist.mbid)) {
-            artistDao.delete(artist)
+    suspend fun unfavorite(artistId: String) {
+        artistDao.getArtistById(artistId)?.let { artist ->
+            artistDao.update(artist.copy(isFavorite = false))
+            if (artistDao.hasNoFavoriteSetlists(artist.mbid)) {
+                artistDao.delete(artist)
+            }
         }
     }
 

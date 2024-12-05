@@ -119,7 +119,7 @@ class SearchViewModel : BaseViewModel() {
     fun removeArtistFromFavorites(artist: ArtistDto) {
         asyncRequest {
             artistFavoritesRepository.getArtistByMbid(artist.mbid)?.let {
-                artistFavoritesRepository.unfavorite(it)
+                artistFavoritesRepository.unfavorite(it.mbid)
             }
         }
     }

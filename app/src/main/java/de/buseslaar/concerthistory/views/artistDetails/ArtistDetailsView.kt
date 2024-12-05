@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.buseslaar.concerthistory.R
+import de.buseslaar.concerthistory.data.database.entity.Artist
 import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
@@ -58,31 +59,61 @@ fun ArtistDetailsView(
     Scaffold(
         topBar = {
             ArtistDetailsTopAppBar(
-                artistName = viewModel.selectedArtist?.name ?: "",
+                artistName = viewModel.selectedArtist?.let { artist ->
+                    when (artist) {
+                        is ArtistDto -> artist.name
+                        is Artist -> artist.name
+                        else -> ""
+                    }
+                } ?: "",
                 isLiked = viewModel.isLiked,
                 onNavigateBack = navigateBack,
                 onLikeToggle = { viewModel.onLikeToggle() }
             )
         }) { innerPadding ->
-        ArtistDetailsViewContent(
-            artist = viewModel.selectedArtist,
-            lastConcerts = viewModel.lastConcerts,
-            favoriteSetlists = viewModel.favoriteSetlists,
-            onShowDetails = {
-                onConcertClick(it)
-            },
-            isLoading = viewModel.isLoading,
-            onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
-            onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
-            modifier = Modifier.padding(innerPadding),
-        )
+        if (viewModel.isCached) {
+            val artist = viewModel.selectedArtist as Artist?
+            artist?.let {
+                ArtistDetailsViewContent(
+                    artistName = artist.name,
+                    artistUrl = artist.url,
+                    lastConcerts = viewModel.lastConcerts,
+                    favoriteSetlists = viewModel.favoriteSetlists,
+                    onShowDetails = {
+                        onConcertClick(it)
+                    },
+                    isLoading = viewModel.isLoading,
+                    onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
+                    onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+        } else {
+            val artist = viewModel.selectedArtist as ArtistDto?
+            artist?.let {
+                ArtistDetailsViewContent(
+                    artistName = artist.name,
+                    artistUrl = artist.url,
+                    lastConcerts = viewModel.lastConcerts,
+                    favoriteSetlists = viewModel.favoriteSetlists,
+                    onShowDetails = {
+                        onConcertClick(it)
+                    },
+                    isLoading = viewModel.isLoading,
+                    onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
+                    onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+        }
     }
 
 }
 
 @Composable
 fun ArtistDetailsViewContent(
-    artist: ArtistDto?,
+    artistName: String,
+    artistUrl: String?,
     isLoading: Boolean,
     lastConcerts: List<SetListDto>,
     favoriteSetlists: Flow<List<Setlist>>,
@@ -92,7 +123,10 @@ fun ArtistDetailsViewContent(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        ArtistHeader(artist = artist)
+        ArtistHeader(
+            artistName = artistName,
+            artistUrl = artistUrl
+        )
         LastConcertsCard(
             lastConcerts = lastConcerts,
             favoriteSetlists = favoriteSetlists,
@@ -105,7 +139,11 @@ fun ArtistDetailsViewContent(
 }
 
 @Composable
-fun ArtistHeader(artist: ArtistDto?, modifier: Modifier = Modifier) {
+fun ArtistHeader(
+    artistName: String,
+    artistUrl: String?,
+    modifier: Modifier = Modifier
+) {
     val uriHandler = LocalUriHandler.current
 
     ElevatedCard(
@@ -123,7 +161,7 @@ fun ArtistHeader(artist: ArtistDto?, modifier: Modifier = Modifier) {
                     )
                 },
                 onClick = {
-                    artist?.let { uriHandler.openUri(it.url) }
+                    artistUrl?.let { uriHandler.openUri(it) }
                 }
             )
             IconButton(
@@ -133,7 +171,7 @@ fun ArtistHeader(artist: ArtistDto?, modifier: Modifier = Modifier) {
                         contentDescription = "Spotify"
                     )
                 }, onClick = {
-                    uriHandler.openUri("https://open.spotify.com/search/${artist?.name}")
+                    uriHandler.openUri("https://open.spotify.com/search/${artistName}")
                 })
 
             IconButton(
@@ -143,7 +181,7 @@ fun ArtistHeader(artist: ArtistDto?, modifier: Modifier = Modifier) {
                         contentDescription = "YouTube"
                     )
                 }, onClick = {
-                    uriHandler.openUri("https://www.youtube.com/results?search_query=${artist?.name}")
+                    uriHandler.openUri("https://www.youtube.com/results?search_query=${artistName}")
                 })
 
         }
