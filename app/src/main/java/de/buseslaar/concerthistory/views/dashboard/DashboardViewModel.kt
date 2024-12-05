@@ -1,5 +1,8 @@
 package de.buseslaar.concerthistory.views.dashboard
 
+import AppContextHolder
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -59,5 +62,10 @@ class DashboardViewModel : BaseViewModel() {
 
     fun getTotalUniqueLocations(): Int {
         return lastAttendedConcerts.map { it.venue.name }.distinct().count()
+    }
+
+    fun isConnected(): Boolean {
+        return (AppContextHolder.getInstance().getApplicationContext()
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo != null
     }
 }

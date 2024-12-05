@@ -56,7 +56,9 @@
     <string name="search_concert_placeholder">Search Concerts</string>
     <string name="search_concerts_title">Concerts</string>
     <string name="search_artists_title">Artists</string>
-
+    <string name="search_no_results_found">No results found</string>
+    <string name="search_internal_server_error">Internal Server Error</string>
+    <string name="search_unknown_error">Unknown Error</string>
     <string name="searchField_clearText">Clear Text</string>
 
     <!-- Artist Details -->
@@ -83,4 +85,15 @@
     <string name="no_last_concert_title">You have no concerts marked as visited yet</string>
     <string name="no_last_concert_message">Go to setlist.fm and search for your visited concerts and click \'I was there\'</string>
     <string name="no_last_concert_action">Go to setlist.fm search</string>
+
+    <!-- No concerts from artist-->
+    <string name="no_concerts_from_artist_title">No concerts found</string>"
+
+
+    <string name="no_internet_title">No internet connection available. Check your connection</string>
+
+    <!-- setlists -->
+    <string name="setlist_not_found">Setlist not found</string>
+    <string name="setlist_no_sets">No sets inside this setlist</string>
+    <string name="setlist_empty_set">This set is empty.</string>
 </resources>

@@ -41,6 +41,9 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.data.remote.dto.SetsDto
 import de.buseslaar.concerthistory.data.remote.dto.SongDto
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.ui.parts.emptyParts.EmptySet
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoSetlistFound
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NotSetsMessage
 import de.buseslaar.concerthistory.utils.formatEventDate
 import java.time.format.FormatStyle
 import kotlin.reflect.KFunction0
@@ -80,7 +83,8 @@ fun SetlistDetailsView(
             modifier = Modifier.padding(innerPadding),
             onArtistClick = {
                 onArtistClick(it)
-            }
+            },
+            isLoading = viewModel.isLoading
         )
     }
 }
@@ -89,7 +93,8 @@ fun SetlistDetailsView(
 fun SetlistDetailsContent(
     selectedSetlist: SetListDto?,
     onArtistClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean
 ) {
     selectedSetlist?.let {
         LazyColumn(
@@ -105,15 +110,21 @@ fun SetlistDetailsContent(
                 )
             }
 
-            selectedSetlist.sets.sets.let {
-                items(it) { singleSet ->
-                    SetEntry(singleSet)
+            if (selectedSetlist.sets.sets.isEmpty()) {
+                item {
+                    NotSetsMessage()
+                }
+            } else {
+                selectedSetlist.sets.sets.let {
+                    items(it) { singleSet ->
+                        SetEntry(singleSet)
+                    }
                 }
             }
         }
     }
-    AnimatedVisibility(selectedSetlist == null) {
-        Text("setlist_not_found")
+    AnimatedVisibility(selectedSetlist == null && !isLoading) {
+        NoSetlistFound()
     }
 }
 
@@ -176,6 +187,9 @@ private fun SetEntry(
             if (set.encore == 1) {
                 Text(text = stringResource(R.string.setlist_details_encore))
             }
+        }
+        if (set.songs.isEmpty()) {
+            EmptySet(modifier = Modifier.padding(8.dp))
         }
         Column(
             modifier = Modifier.padding(8.dp)

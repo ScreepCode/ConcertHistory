@@ -43,6 +43,7 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ArtistPreview
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoConnectionMessage
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoFavoritesMessage
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoLastConcertsMessage
 import de.buseslaar.concerthistory.ui.parts.emptyParts.NoUserView
@@ -77,6 +78,7 @@ fun DashboardView(
 
         DashboardContent(
             isLoading = viewModel.isLoading,
+            isInternetConnected = viewModel.isConnected(),
             isUserNameProvided = viewModel.isUserNameProvided(),
             lastAttendedConcerts = viewModel.lastAttendedConcerts,
             favoriteArtists = favoriteArtists,
@@ -96,6 +98,7 @@ fun DashboardView(
 @Composable
 fun DashboardContent(
     isLoading: Boolean,
+    isInternetConnected: Boolean,
     isUserNameProvided: Boolean,
     lastAttendedConcerts: List<SetListDto>,
     favoriteArtists: List<Artist>,
@@ -126,7 +129,8 @@ fun DashboardContent(
                             Overview(
                                 totalConcertsAttended = totalConcertsAttended,
                                 totalUniqueArtists = totalUniqueArtists,
-                                totalUniqueLocations = totalUniqueLocations
+                                totalUniqueLocations = totalUniqueLocations,
+                                isInternetConnected = isInternetConnected
                             )
                         }
 
@@ -135,6 +139,7 @@ fun DashboardContent(
                                 lastAttendedConcerts = lastAttendedConcerts,
                                 onClickMore = onShowMoreConcerts,
                                 onClickDetails = onShowConcertDetails,
+                                isInternetConnected = isInternetConnected
                             )
                         }
 
@@ -158,7 +163,8 @@ fun DashboardContent(
 private fun Overview(
     totalConcertsAttended: Int,
     totalUniqueArtists: Int,
-    totalUniqueLocations: Int
+    totalUniqueLocations: Int,
+    isInternetConnected: Boolean
 ) {
     ElevatedCard {
         Text(
@@ -174,9 +180,13 @@ private fun Overview(
                 .background(color = MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            Text(stringResource(R.string.concerts_attended, totalConcertsAttended))
-            Text(stringResource(R.string.different_artists, totalUniqueArtists))
-            Text(stringResource(R.string.different_locations, totalUniqueLocations))
+            if (!isInternetConnected) {
+                NoConnectionMessage()
+            } else {
+                Text(stringResource(R.string.concerts_attended, totalConcertsAttended))
+                Text(stringResource(R.string.different_artists, totalUniqueArtists))
+                Text(stringResource(R.string.different_locations, totalUniqueLocations))
+            }
         }
     }
 }
@@ -185,7 +195,8 @@ private fun Overview(
 private fun LastAttendedConcertsPreview(
     lastAttendedConcerts: List<SetListDto>,
     onClickMore: () -> Unit,
-    onClickDetails: (String) -> Unit
+    onClickDetails: (String) -> Unit,
+    isInternetConnected: Boolean,
 ) {
     ElevatedCard {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -218,9 +229,18 @@ private fun LastAttendedConcertsPreview(
                 }
 
             } else {
-                NoLastConcertsMessage(
-                    modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
-                )
+                if (!isInternetConnected) {
+                    NoConnectionMessage(
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.background)
+                            .padding(16.dp)
+                    )
+                } else {
+                    NoLastConcertsMessage(
+                        modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+
+                        )
+                }
             }
         }
     }

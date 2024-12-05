@@ -1,5 +1,8 @@
 package de.buseslaar.concerthistory.views.visited
 
+import AppContextHolder
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -51,5 +54,10 @@ class VisitedViewModel : BaseViewModel() {
                 favoritesRepository.delete(it)
             }
         }
+    }
+
+    fun isConnected(): Boolean {
+        return (AppContextHolder.getInstance().getApplicationContext()
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo != null
     }
 }

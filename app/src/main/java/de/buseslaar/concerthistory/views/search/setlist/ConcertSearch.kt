@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +21,7 @@ import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.ui.parts.ConcertPreview
 import de.buseslaar.concerthistory.ui.parts.LoadingIndicator
 import de.buseslaar.concerthistory.ui.parts.SearchField
+import de.buseslaar.concerthistory.ui.parts.emptyParts.NoSearchResultView
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -29,7 +29,7 @@ fun ConcertSearch(
     onSearch: () -> Unit,
     onValueChange: (String) -> Unit,
     value: String,
-    errorMessage: String,
+    errorMessage: Int?,
     concerts: List<SetListDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
@@ -64,7 +64,7 @@ fun ConcertSearchContent(
     onValueChange: (String) -> Unit,
     placeholder: String,
     value: String,
-    errorMessage: String,
+    errorMessage: Int?,
     concerts: List<SetListDto>,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
@@ -104,8 +104,8 @@ fun ConcertSearchContent(
                 LoadingIndicator(modifier = Modifier.padding(16.dp))
             }
 
-            AnimatedVisibility(errorMessage.isNotBlank()) {
-                Text(errorMessage)
+            AnimatedVisibility(errorMessage != null) {
+                NoSearchResultView(resourceId = errorMessage ?: R.string.search_unknown_error)
             }
 
             LazyColumn {
