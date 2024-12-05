@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import de.buseslaar.concerthistory.navigation.ConcertHistoryNavHost
 import de.buseslaar.concerthistory.ui.theme.ConcertHistoryTheme
 import de.buseslaar.concerthistory.views.mainView.MainView
+import initializeAppContextHolder
 
 class MainActivity : ComponentActivity() {
 
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize()
+        initializeAppContextHolder()
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 !viewModel.isReady.value
