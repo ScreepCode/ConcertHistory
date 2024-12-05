@@ -9,8 +9,8 @@ import androidx.compose.runtime.setValue
 import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.database.repository.SetlistRepository
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
-import de.buseslaar.concerthistory.data.mapper.reduceToEntity
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
+import de.buseslaar.concerthistory.data.remote.service.ArtistService
 import de.buseslaar.concerthistory.data.remote.service.UserService
 import de.buseslaar.concerthistory.utils.BaseViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.first
 
 class VisitedViewModel : BaseViewModel() {
     private val userService = UserService()
+    private val artistService = ArtistService()
     private val dataStore = DataStoreServiceProvider.getInstance()
     private val favoritesRepository = SetlistRepository()
 
@@ -44,14 +45,19 @@ class VisitedViewModel : BaseViewModel() {
 
     fun addConcertToFavorites(setListDto: SetListDto) {
         asyncRequest {
-            favoritesRepository.insert(setListDto.reduceToEntity())
+            val lastConcerts = artistService.getLastConcerts(setListDto.artist.mbid).setlists
+            favoritesRepository.insert(
+                insertSetlist = setListDto,
+                isFavoriteConcert = true,
+                allSetlists = lastConcerts
+            )
         }
     }
 
     fun removeConcertFromFavorites(setlistDto: SetListDto) {
         asyncRequest {
             favoritesRepository.getSetlistById(setlistDto.id)?.let {
-                favoritesRepository.delete(it)
+                favoritesRepository.unfavorite(it)
             }
         }
     }

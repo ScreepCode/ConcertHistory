@@ -2,12 +2,32 @@ package de.buseslaar.concerthistory.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "setlist")
+@Entity(
+    tableName = "setlist",
+    foreignKeys = [ForeignKey(
+        entity = Artist::class,
+        parentColumns = ["mbid"],
+        childColumns = ["artistMbid"],
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index(value = ["artistMbid"])]
+)
 data class Setlist(
     @PrimaryKey
-    val id: String,
+    val setlistId: String,
+
+    @ColumnInfo(name = "isFavorite")
+    val isFavorite: Boolean,
+
+    @ColumnInfo(name = "addedToDatabaseTimestamp")
+    val addedToDatabaseTimestamp: Long = System.currentTimeMillis(),
+
+    @ColumnInfo(name = "artistMbid")
+    val artistMbid: String,
 
     @ColumnInfo(name = "artistName")
     val artistName: String,
@@ -26,4 +46,7 @@ data class Setlist(
 
     @ColumnInfo(name = "lastUpdated")
     val lastUpdated: String,
+
+    @ColumnInfo(name = "url")
+    val url: String
 )

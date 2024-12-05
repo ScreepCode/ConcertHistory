@@ -1,5 +1,6 @@
 package de.buseslaar.concerthistory.views.visited
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExitTransition
@@ -63,6 +64,7 @@ fun VisitedView(
     }
 }
 
+@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 fun VisitedContent(
     isLoading: Boolean,
@@ -83,8 +85,8 @@ fun VisitedContent(
     ) {
         Crossfade(
             isUserNameProvided
-        ) {
-            when (it) {
+        ) { isProvided ->
+            when (isProvided) {
                 true -> {
                     Crossfade(isInternetConnected) { connected ->
                         when (connected) {
@@ -99,8 +101,7 @@ fun VisitedContent(
                                                 modifier = modifier
                                             ) {
                                                 itemsIndexed(lastAttendedConcerts) { _, concert ->
-                                                    val isLiked =
-                                                        favorites.any { it.id == concert.id }
+                                                    val isLiked = favorites.any { it.setlistId == concert.id }
 
                                                     with(concert) {
                                                         ConcertPreview(

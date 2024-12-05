@@ -40,7 +40,7 @@ fun SetlistFavorites(
                             venueName = venueName,
                             venueCity = venueCity,
                             eventDate = eventDate,
-                            onRowClick = { onRowClick(favoriteSetlist.id) },
+                            onRowClick = { onRowClick(favoriteSetlist.setlistId) },
                             isLiked = true,
                             onLikeClick = { onDislikeClick(favoriteSetlist) },
                         )

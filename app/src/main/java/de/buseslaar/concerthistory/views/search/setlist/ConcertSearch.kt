@@ -110,7 +110,7 @@ fun ConcertSearchContent(
 
             LazyColumn {
                 items(concerts) { concert ->
-                    val isLiked = favorites.any { it.id == concert.id }
+                    val isLiked = favorites.any { it.setlistId == concert.id }
                     with(concert) {
                         ConcertPreview(
                             artistName = artist.name,

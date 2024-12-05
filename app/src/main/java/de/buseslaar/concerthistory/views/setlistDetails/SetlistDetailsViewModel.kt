@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.buseslaar.concerthistory.data.database.repository.SetlistRepository
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
-import de.buseslaar.concerthistory.data.mapper.reduceToEntity
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
+import de.buseslaar.concerthistory.data.remote.service.ArtistService
 import de.buseslaar.concerthistory.data.remote.service.SetlistService
 import de.buseslaar.concerthistory.utils.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class SetlistDetailsViewModel : BaseViewModel() {
     private val dataStore = DataStoreServiceProvider.getInstance()
     private val setlistService = SetlistService()
+    private val artistService = ArtistService()
     private val favoritesRepository = SetlistRepository()
 
     var selectedSetlist by mutableStateOf<SetListDto?>(null)
@@ -47,14 +48,21 @@ class SetlistDetailsViewModel : BaseViewModel() {
 
     private fun addConcertToFavorites() {
         asyncRequest {
-            favoritesRepository.insert(selectedSetlist!!.reduceToEntity())
+            selectedSetlist?.let { setlist ->
+                val lastConcerts = artistService.getLastConcerts(setlist.artist.mbid).setlists
+                favoritesRepository.insert(
+                    insertSetlist = setlist,
+                    isFavoriteConcert = true,
+                    allSetlists = lastConcerts
+                )
+            }
         }
     }
 
     private fun removeConcertFromFavorites() {
         asyncRequest {
             favoritesRepository.getSetlistById(selectedSetlist!!.id)?.let {
-                favoritesRepository.delete(it)
+                favoritesRepository.unfavorite(it)
             }
         }
     }

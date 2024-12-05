@@ -11,7 +11,6 @@ import de.buseslaar.concerthistory.data.database.entity.Artist
 import de.buseslaar.concerthistory.data.database.entity.Setlist
 import de.buseslaar.concerthistory.data.database.repository.ArtistRepository
 import de.buseslaar.concerthistory.data.database.repository.SetlistRepository
-import de.buseslaar.concerthistory.data.mapper.reduceToEntity
 import de.buseslaar.concerthistory.data.remote.dto.ArtistDto
 import de.buseslaar.concerthistory.data.remote.dto.SetListDto
 import de.buseslaar.concerthistory.data.remote.service.ArtistService
@@ -92,28 +91,35 @@ class SearchViewModel : BaseViewModel() {
 
     fun addConcertToFavorites(setListDto: SetListDto) {
         asyncRequest {
-            setlistFavoritesRepository.insert(setListDto.reduceToEntity())
+            val lastConcerts = artistService.getLastConcerts(setListDto.artist.mbid).setlists
+            setlistFavoritesRepository.insert(setListDto, isFavoriteConcert = true, lastConcerts)
         }
     }
 
     fun removeConcertFromFavorites(setlistDto: SetListDto) {
         asyncRequest {
             setlistFavoritesRepository.getSetlistById(setlistDto.id)?.let {
-                setlistFavoritesRepository.delete(it)
+                setlistFavoritesRepository.unfavorite(it)
             }
         }
     }
 
     fun addArtistToFavorites(artist: ArtistDto) {
         asyncRequest {
-            artistFavoritesRepository.insert(artist.reduceToEntity())
+            // Add artist to database
+            val lastConcerts = artistService.getLastConcerts(artist.mbid).setlists
+            artistFavoritesRepository.insertWithSetlists(
+                artistId = artist.mbid,
+                isFavoriteArtist = true,
+                setlists = lastConcerts,
+            )
         }
     }
 
     fun removeArtistFromFavorites(artist: ArtistDto) {
         asyncRequest {
             artistFavoritesRepository.getArtistByMbid(artist.mbid)?.let {
-                artistFavoritesRepository.delete(it)
+                artistFavoritesRepository.unfavorite(it.mbid)
             }
         }
     }
