@@ -34,7 +34,9 @@ class ArtistDetailsViewModel : BaseViewModel() {
 
     fun addConcertToFavorites(setListDto: SetListDto) {
         asyncRequest {
-            setlistFavoritesRepository.insert(setListDto, isFavoriteConcert = true)
+            setlistFavoritesRepository.insert(
+                insertSetlist = setListDto, isFavoriteConcert = true, allSetlists = lastConcerts
+            )
         }
     }
 
@@ -48,7 +50,7 @@ class ArtistDetailsViewModel : BaseViewModel() {
 
     private fun addArtistToFavorites(artist: ArtistDto) {
         asyncRequest {
-            artistFavoritesRepository.insertOrUpdateFavorite(artist, isFavoriteArtist = true)
+            artistFavoritesRepository.updateFavorite(artist, isFavoriteArtist = true)
         }
     }
 

@@ -91,7 +91,8 @@ class SearchViewModel : BaseViewModel() {
 
     fun addConcertToFavorites(setListDto: SetListDto) {
         asyncRequest {
-            setlistFavoritesRepository.insert(setListDto, isFavoriteConcert = true)
+            val lastConcerts = artistService.getLastConcerts(setListDto.artist.mbid).setlists
+            setlistFavoritesRepository.insert(setListDto, isFavoriteConcert = true, lastConcerts)
         }
     }
 
@@ -105,7 +106,13 @@ class SearchViewModel : BaseViewModel() {
 
     fun addArtistToFavorites(artist: ArtistDto) {
         asyncRequest {
-            artistFavoritesRepository.insertOrUpdateFavorite(artist, isFavoriteArtist = true)
+            // Add artist to database
+            val lastConcerts = artistService.getLastConcerts(artist.mbid).setlists
+            artistFavoritesRepository.insertWithSetlists(
+                artistId = artist.mbid,
+                isFavoriteArtist = true,
+                setlists = lastConcerts,
+            )
         }
     }
 

@@ -16,27 +16,26 @@ class SetlistRepository {
         return setlistDao.getSetlistById(id)
     }
 
-//    suspend fun insert(setlist: SetListDto, isFavoriteConcert: Boolean = true) {
-//        val artistEntity = setlist.artist.reduceToEntity(isFavorite = false)
-//        artistDao.insert(artistEntity)
-//
-//        val setlistEntity = setlist.reduceToEntity(isFavorite = isFavoriteConcert)
-//        setlistDao.insert(setlistEntity)
-//    }
-
-    suspend fun insert(setlist: SetListDto, isFavoriteConcert: Boolean = true) {
+    suspend fun insert(
+        insertSetlist: SetListDto,
+        isFavoriteConcert: Boolean = true,
+        allSetlists: List<SetListDto>
+    ) {
         // Add artist if not already in database
-        val existingArtist = artistDao.getArtistById(setlist.artist.mbid)
+        val existingArtist = artistDao.getArtistById(insertSetlist.artist.mbid)
         if (existingArtist == null) {
-            artistDao.insert(setlist.artist.reduceToEntity(isFavorite = false))
+            artistDao.insert(insertSetlist.artist.reduceToEntity(isFavorite = false))
         }
 
-        val setlistEntity = setlist.reduceToEntity(isFavorite = isFavoriteConcert)
-        val existingSetlist = setlistDao.getSetlistById(setlistEntity.setlistId)
-        if (existingSetlist == null) {
-            setlistDao.insert(setlistEntity)
-        } else {
-            setlistDao.update(setlistEntity)
+        for (setlist in allSetlists) {
+            val existingSetlist = setlistDao.getSetlistById(setlist.id)
+            if (existingSetlist != null && insertSetlist.id == setlist.id) {
+                setlistDao.update(setlist.reduceToEntity(isFavorite = isFavoriteConcert))
+            } else if (existingSetlist == null && insertSetlist.id == setlist.id) {
+                setlistDao.insert(setlist.reduceToEntity(isFavorite = isFavoriteConcert))
+            } else if (existingSetlist == null) {
+                setlistDao.insert(setlist.reduceToEntity(isFavorite = false))
+            }
         }
     }
 
