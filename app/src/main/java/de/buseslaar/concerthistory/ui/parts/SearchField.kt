@@ -21,6 +21,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import de.buseslaar.concerthistory.R
@@ -34,6 +36,7 @@ fun SearchField(
     value: String,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
+    textFieldContentDescription: String,
 ) {
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
@@ -52,6 +55,9 @@ fun SearchField(
                 if (it.isFocused != textFieldFocused) {
                     onTextFieldFocusedChange(it.isFocused)
                 }
+            }
+            .semantics {
+                contentDescription = textFieldContentDescription
             },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
@@ -91,7 +97,6 @@ fun SearchField(
 
             )
         },
-
         shape = RoundedCornerShape(16.dp),
         value = value,
         singleLine = true,

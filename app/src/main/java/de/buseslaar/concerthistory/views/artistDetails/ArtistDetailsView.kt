@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,7 +70,8 @@ fun ArtistDetailsView(
                 } ?: "",
                 isLiked = viewModel.isLiked,
                 onNavigateBack = navigateBack,
-                onLikeToggle = { viewModel.onLikeToggle() }
+                onLikeToggle = { viewModel.onLikeToggle() },
+                topBarContentDescription = stringResource(R.string.artist_details_topBar)
             )
         }) { innerPadding ->
         if (viewModel.isCached) {
@@ -245,7 +248,8 @@ fun ArtistDetailsTopAppBar(
     artistName: String,
     isLiked: Boolean,
     onNavigateBack: () -> Unit,
-    onLikeToggle: () -> Unit
+    onLikeToggle: () -> Unit,
+    topBarContentDescription: String
 ) {
     TopAppBar(
         navigationIcon = {
@@ -275,6 +279,9 @@ fun ArtistDetailsTopAppBar(
                         contentDescription = stringResource(R.string.isNotLiked)
                     )
             })
+        },
+        modifier = Modifier.semantics {
+            contentDescription = topBarContentDescription
         }
     )
 }
