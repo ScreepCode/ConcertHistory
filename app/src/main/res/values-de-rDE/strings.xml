@@ -7,7 +7,7 @@
     <string name="settings">Einstellungen</string>
     <string name="visited_concerts">Besuchte Konzerte</string>
     <string name="setlist_details">Konzertdetails</string>
-    <string name="setlist_favorites">Deine Favouriten</string>
+    <string name="setlist_favorites">Deine Favoriten</string>
 
     <!-- Settings -->
     <string name="settings_theme">Design</string>
@@ -72,4 +72,8 @@
     <string name="setlist_not_found">Konzert wurde nicht gefunden</string>
     <string name="setlist_no_sets">Kein Set vorhanden in diesem Konzert</string>
     <string name="setlist_empty_set">Dieses Set ist leer.</string>
+    <string name="search_artist_list">Künstler Liste</string>
+    <string name="artist_details_topBar">Künstler Details</string>
+    <string name="search_artist_button">search_artist_button</string>
+    <string name="clear_text">clear_text</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import de.buseslaar.concerthistory.data.database.FavoritesDatabaseProvider
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 
@@ -37,6 +38,16 @@ fun ComposeContentTestRule.waitUntilNodeIsDisplayed(
     this.waitUntil(timeoutMillis = timeoutMillis) {
         this.onAllNodesWithText(text)
             .fetchSemanticsNodes(atLeastOneRootRequired = true).isNotEmpty()
+    }
+}
+
+fun ComposeContentTestRule.waitUntilChildNodesDisplay(
+    contentDescription: String,
+    timeoutMillis: Long
+) {
+    this.waitUntil(timeoutMillis = timeoutMillis) {
+        this.onNodeWithContentDescription(contentDescription)
+            .fetchSemanticsNode().children.isNotEmpty()
     }
 }
 

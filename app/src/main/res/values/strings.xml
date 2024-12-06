@@ -96,4 +96,8 @@
     <string name="setlist_not_found">Setlist not found</string>
     <string name="setlist_no_sets">No sets inside this setlist</string>
     <string name="setlist_empty_set">This set is empty.</string>
+    <string name="search_artist_list">Artist List</string>
+    <string name="artist_details_topBar">Artist Details</string>
+    <string name="search_artist_button">search_artist_button</string>
+    <string name="clear_text">clear_text</string>
 </resources>

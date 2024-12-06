@@ -37,8 +37,8 @@ fun ConcertSearch(
     onShowDetails: (String) -> Unit,
     onLikeClick: (SetListDto) -> Unit,
     onDislikeClick: (SetListDto) -> Unit,
-    isLoading: Boolean
-
+    isLoading: Boolean,
+    textFieldContentDescription: String
 ) {
 
     ConcertSearchContent(
@@ -54,7 +54,8 @@ fun ConcertSearch(
         onShowDetails = onShowDetails,
         onLikeClick = onLikeClick,
         onDislikeClick = onDislikeClick,
-        isLoading = isLoading
+        isLoading = isLoading,
+        textFieldContentDescription = textFieldContentDescription
     )
 }
 
@@ -66,6 +67,7 @@ fun ConcertSearchContent(
     value: String,
     errorMessage: Int?,
     concerts: List<SetListDto>,
+    textFieldContentDescription: String,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
     favoriteSetlists: Flow<List<Setlist>>,
@@ -91,7 +93,8 @@ fun ConcertSearchContent(
                 placeholder = placeholder,
                 value = value,
                 textFieldFocused = textFieldFocused,
-                onTextFieldFocusedChange = onTextFieldFocusedChange
+                onTextFieldFocusedChange = onTextFieldFocusedChange,
+                textFieldContentDescription = textFieldContentDescription,
             )
         }
         Column(

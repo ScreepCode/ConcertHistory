@@ -13,6 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.buseslaar.concerthistory.R
 import de.buseslaar.concerthistory.data.database.entity.Artist
@@ -31,6 +33,7 @@ fun ArtistSearch(
     value: String,
     errorMessage: Int?,
     artists: List<ArtistDto>,
+    textFieldContentDescription: String,
     textFieldFocused: Boolean,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
     favoriteArtists: Flow<List<Artist>>,
@@ -49,11 +52,13 @@ fun ArtistSearch(
         artists = artists,
         textFieldFocused,
         onTextFieldFocusedChange = onTextFieldFocusedChange,
+        textFieldContentDescription = textFieldContentDescription,
         favoriteArtists = favoriteArtists,
         onShowDetails = onShowDetails,
         onLikeClick = onLikeClick,
         onDislikeClick = onDislikeClick,
-        isLoading = isLoading
+        isLoading = isLoading,
+        listContentDescription = stringResource(R.string.search_artist_list)
     )
 }
 
@@ -67,12 +72,14 @@ fun ArtistSearchContent(
     errorMessage: Int?,
     artists: List<ArtistDto>,
     textFieldFocused: Boolean,
+    textFieldContentDescription: String,
     onTextFieldFocusedChange: (Boolean) -> Unit = {},
     favoriteArtists: Flow<List<Artist>>,
     onShowDetails: (String) -> Unit,
     onLikeClick: (ArtistDto) -> Unit,
     onDislikeClick: (ArtistDto) -> Unit,
     isLoading: Boolean,
+    listContentDescription: String,
 ) {
     val favorites by favoriteArtists.collectAsState(initial = emptyList())
     Column {
@@ -88,7 +95,8 @@ fun ArtistSearchContent(
                 placeholder = placeholder,
                 value = value,
                 textFieldFocused = textFieldFocused,
-                onTextFieldFocusedChange = onTextFieldFocusedChange
+                onTextFieldFocusedChange = onTextFieldFocusedChange,
+                textFieldContentDescription = textFieldContentDescription
             )
         }
         if (isLoading) {
@@ -98,8 +106,12 @@ fun ArtistSearchContent(
         AnimatedVisibility(errorMessage != null) {
             NoSearchResultView(resourceId = errorMessage ?: R.string.search_unknown_error)
         }
-        
-        LazyColumn {
+
+        LazyColumn(
+            modifier = Modifier.semantics {
+                contentDescription = listContentDescription
+            }
+        ) {
             items(artists) { artist ->
                 val isLiked = favorites.any { it.mbid == artist.mbid }
                 ArtistPreview(

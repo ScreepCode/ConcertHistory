@@ -78,7 +78,9 @@ fun SearchView(
             onShowConcertDetails = onShowConcertDetails,
             onLikeConcertClick = { viewModel.addConcertToFavorites(it) },
             onDislikeConcertClick = { viewModel.removeConcertFromFavorites(it) },
-            isLoading = viewModel.isLoading
+            isLoading = viewModel.isLoading,
+            artistTextFieldContentDescription = stringResource(R.string.search_artists_placeholder),
+            concertTextFieldDescription = stringResource(R.string.search_concert_placeholder)
         )
     }
 }
@@ -99,6 +101,7 @@ fun SearchViewContent(
     searchConcerts: () -> Unit = {},
     searchArtists: () -> Unit = {},
     concertSearchText: String,
+    concertTextFieldDescription: String,
     onConcertSearchTextChange: (String) -> Unit = {},
     onArtistSearchTextChange: (String) -> Unit = {},
     artistSearchText: String,
@@ -118,7 +121,8 @@ fun SearchViewContent(
     onShowArtistDetails: (String) -> Unit,
     onLikeArtistClick: (ArtistDto) -> Unit,
     onDislikeArtistClick: (ArtistDto) -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean,
+    artistTextFieldContentDescription: String
 ) {
     var elements = listOf<TabElement>(
         TabElement(
@@ -136,7 +140,8 @@ fun SearchViewContent(
                     onShowDetails = onShowConcertDetails,
                     onLikeClick = onLikeConcertClick,
                     onDislikeClick = onDislikeConcertClick,
-                    isLoading = isLoading
+                    isLoading = isLoading,
+                    textFieldContentDescription = concertTextFieldDescription,
                 )
             }
         ), TabElement(
@@ -154,7 +159,8 @@ fun SearchViewContent(
                     favoriteArtists = favoriteArtists,
                     onShowDetails = onShowArtistDetails,
                     onLikeClick = onLikeArtistClick,
-                    onDislikeClick = onDislikeArtistClick
+                    onDislikeClick = onDislikeArtistClick,
+                    textFieldContentDescription = artistTextFieldContentDescription,
                 )
             }
         )
