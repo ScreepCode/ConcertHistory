@@ -20,6 +20,7 @@ import initializeAppContextHolder
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
+    private val splashScreenDuration = 500L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,9 @@ class MainActivity : ComponentActivity() {
         initializeAppContextHolder()
         installSplashScreen().apply {
             setKeepOnScreenCondition {
-                !viewModel.isReady.value
+                val elapsedTime = System.currentTimeMillis() - startTime
+                val minDurationReached = elapsedTime >= splashScreenDuration
+                !viewModel.isReady.value || !minDurationReached
             }
             setOnExitAnimationListener { screen ->
                 val zoomX = ObjectAnimator.ofFloat(
@@ -62,6 +65,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private val startTime = System.currentTimeMillis()
 }
 
 @Composable
