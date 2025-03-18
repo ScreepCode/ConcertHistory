@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ConcertHistoryTheme {
-                AppContent()
+                AppContent(isOnboardingCompleted = viewModel.isOnboardingCompleted.value)
             }
         }
     }
@@ -70,9 +70,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AppContent() {
+fun AppContent(isOnboardingCompleted: Boolean) {
     val navController = rememberNavController()
     MainView(navController = navController) {
-        ConcertHistoryNavHost(navController)
+        ConcertHistoryNavHost(navController, isOnboardingCompleted = isOnboardingCompleted)
     }
+
 }
