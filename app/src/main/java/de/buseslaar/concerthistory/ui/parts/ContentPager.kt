@@ -17,12 +17,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun OnboardingContentPager(
@@ -36,11 +38,19 @@ fun OnboardingContentPager(
     val pagerState = rememberPagerState(initialPage = currentPage) { items.size }
 
     LaunchedEffect(currentPage) {
-        pagerState.animateScrollToPage(currentPage)
+        if (pagerState.currentPage != currentPage) {
+            pagerState.animateScrollToPage(currentPage)
+        }
     }
 
-    LaunchedEffect(pagerState.currentPage) {
-        onPageChange(pagerState.currentPage)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .distinctUntilChanged()
+            .collect { page ->
+                if (page != currentPage) {
+                    onPageChange(page)
+                }
+            }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

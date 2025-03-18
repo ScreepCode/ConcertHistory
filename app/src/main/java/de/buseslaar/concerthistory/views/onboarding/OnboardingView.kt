@@ -1,5 +1,6 @@
 package de.buseslaar.concerthistory.views.onboarding
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,6 +44,10 @@ fun OnboardingScreen(
     var currentPage by remember { mutableIntStateOf(0) }
     var showSkipDialog by remember { mutableStateOf(false) }
 
+    BackHandler(enabled = currentPage > 0) {
+        currentPage--
+    }
+
     val pages = createPages(
         currentPage = currentPage,
         onContinue = { currentPage++ },
@@ -54,7 +59,11 @@ fun OnboardingScreen(
         topBar = {
             OnboardingTopBar(
                 currentPage = currentPage,
-                onNavigateBack = { currentPage-- },
+                onNavigateBack = {
+                    if (currentPage > 0) {
+                        currentPage--
+                    }
+                },
                 onSkip = { showSkipDialog = true }
             )
         }
@@ -66,7 +75,7 @@ fun OnboardingScreen(
             OnboardingContentPager(
                 items = pages,
                 currentPage = currentPage,
-                onPageChange = { newPage -> currentPage = newPage }
+                onPageChange = { newPage -> currentPage = newPage },
             )
         }
     }
