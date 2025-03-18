@@ -4,6 +4,31 @@
     <string name="desc_show_more">Mehr anzeigen</string>
     <string name="desc_more_menu">Mehr anzeigen Menü</string>
     <string name="desc_artistPicture">Künsterbild</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Skip Intro</string>
+    <string name="onboarding_skip_title">Onboarding überspringen</string>
+    <string name="onboarding_skip_message">Möchten Sie das Onboarding wirklich überspringen?</string>
+    <string name="onboarding_skip_confirm">Ja</string>
+    <string name="onboarding_skip_cancel">Nein</string>
+    <string name="onboarding_welcome_title">Willkommen bei ConcertHistory!</string>
+    <string name="onboarding_welcome_description">Hier kannst du jederzeit in deiner Hosentasche auf deine Konzert-Historie zugreifen.</string>
+    <string name="onboarding_welcome_details">Die App ist eine Ansicht deiner auf der Setlist.fm gespeicherten Konzerte.</string>
+    <string name="onboarding_continue">Weiter</string>
+    <string name="onboarding_features_title">Funktionen von ConcertHistory</string>
+    <string name="onboarding_feature_1">Anzeige von besuchten Konzerten</string>
+    <string name="onboarding_feature_2">Suche nach Künstlern und Konzerten</string>
+    <string name="onboarding_feature_3">Favorisieren von Künstlern und Konzerten</string>
+    <string name="onboarding_login_title">Bereit um loszulegen?</string>
+    <string name="onboarding_login_description">Gebe deinen Setlist.fm Nutzernamen ein:</string>
+    <string name="onboarding_login_label">Nutzername</string>
+    <string name="onboarding_login_helper">Du kannst deinen Nutzernamen später in den Einstellungen ändern.</string>
+    <string name="onboarding_login_button">Loslegen als %1$s</string>
+    <string name="onboarding_login_demo">Demo starten als %1$s</string>
+    <string name="onboarding_login_no_account">Du hast noch keinen Setlist.fm Account?</string>
+    <string name="onboarding_login_register">Registriere dich hier.</string>
+
+    <!-- App Header -->
     <string name="settings">Einstellungen</string>
     <string name="visited_concerts">Besuchte Konzerte</string>
     <string name="setlist_details">Konzertdetails</string>
