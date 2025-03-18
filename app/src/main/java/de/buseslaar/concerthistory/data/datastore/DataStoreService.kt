@@ -14,7 +14,7 @@ class DataStoreService(context: Context) {
 
     val themeKey = stringPreferencesKey("theme")
     val setlistUsernameKey = stringPreferencesKey("setListUsername")
-    val onboardingCompletedKey = booleanPreferencesKey("onboarding_completed")
+    val onboardingCompletedKey = booleanPreferencesKey("onboardingCompleted")
 
     val theme: Flow<ThemeMode> = dataStore.data.map { preferences ->
         ThemeMode.valueOf(preferences[themeKey] ?: ThemeMode.SYSTEM.toString())
