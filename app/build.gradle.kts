@@ -65,6 +65,8 @@ android {
             )
         }
         debug {
+            applicationIdSuffix = ".debug"
+            resValue("string", "app_name", "@string/app_name_debug")
             isDebuggable = true
             versionNameSuffix = "-debug"
         }
