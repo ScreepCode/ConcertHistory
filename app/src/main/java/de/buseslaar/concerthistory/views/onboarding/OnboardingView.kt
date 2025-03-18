@@ -112,10 +112,10 @@ private fun createPages(
         },
         {
             LoginPage(
-                onLogin = {
-                    onboardingViewModel.setSetlistUsername(it)
-                    onboardingViewModel.setOnboardingCompleted(true)
-                    onOnboardingCompleted()
+                onLogin = { username ->
+                    onboardingViewModel.completeOnboardingWithUsername(username) {
+                        onOnboardingCompleted()
+                    }
                 }
             )
         }

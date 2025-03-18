@@ -19,4 +19,12 @@ class OnboardingViewModel : ViewModel() {
             dataStoreService.setSetlistUsername(userName)
         }
     }
+
+    fun completeOnboardingWithUsername(userName: String, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            dataStoreService.setSetlistUsername(userName)
+            dataStoreService.setOnboardingCompleted(true)
+            onComplete()
+        }
+    }
 }

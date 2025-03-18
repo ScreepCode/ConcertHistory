@@ -11,7 +11,9 @@ import de.buseslaar.concerthistory.data.database.FavoritesDatabaseProvider
 import de.buseslaar.concerthistory.data.datastore.DataStoreServiceProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -28,10 +30,8 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
 
         viewModelScope.launch {
             val dataStoreService = DataStoreServiceProvider.getInstance()
-            viewModelScope.launch {
-                dataStoreService.isOnboardingCompleted.collect { completed ->
-                    _isOnboardingCompleted.value = completed
-                }
+            runBlocking {
+                _isOnboardingCompleted.value = dataStoreService.isOnboardingCompleted.first()
             }
             _isReady.value = true
         }
