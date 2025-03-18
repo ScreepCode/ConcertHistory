@@ -26,7 +26,7 @@ fun ComposeContentTestRule.launchConcertHistoryApp(context: Context) {
         }
 
         setContent {
-            AppContent()
+            AppContent(isOnboardingCompleted = true)
         }
     }
 }

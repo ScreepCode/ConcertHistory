@@ -7,6 +7,29 @@
     <string name="desc_more_menu">More Menu</string>
     <string name="desc_artistPicture">Artist Picture</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Skip Intro</string>
+    <string name="onboarding_skip_title">Skip Onboarding</string>
+    <string name="onboarding_skip_message">Do you really want to skip onboarding?</string>
+    <string name="onboarding_skip_confirm">Yes</string>
+    <string name="onboarding_skip_cancel">No</string>
+    <string name="onboarding_welcome_title">Welcome to ConcertHistory!</string>
+    <string name="onboarding_welcome_description">Here you can access your concert history anytime, in your pocket.</string>
+    <string name="onboarding_welcome_details">The app is a view of your concerts saved on Setlist.fm.</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_features_title">ConcertHistory features</string>
+    <string name="onboarding_feature_1">Display attended concerts</string>
+    <string name="onboarding_feature_2">Search for artists and concerts</string>
+    <string name="onboarding_feature_3">Favorite artists and concerts</string>
+    <string name="onboarding_login_title">Ready to get started?</string>
+    <string name="onboarding_login_description">Enter your Setlist.fm username:</string>
+    <string name="onboarding_login_label">Username</string>
+    <string name="onboarding_login_helper">You can change your username later in the settings.</string>
+    <string name="onboarding_login_button">Get started as %1$s</string>
+    <string name="onboarding_login_demo">Start demo as %1$s</string>
+    <string name="onboarding_login_no_account">You don\'t have a Setlist.fm account yet Account?</string>
+    <string name="onboarding_login_register">Register here.</string>
+
     <!-- App Header -->
     <string name="settings">Settings</string>
     <string name="visited_concerts">Visited Concerts</string>">

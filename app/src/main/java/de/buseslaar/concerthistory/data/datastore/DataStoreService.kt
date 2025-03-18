@@ -1,6 +1,7 @@
 package de.buseslaar.concerthistory.data.datastore
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import de.buseslaar.concerthistory.dataStore
@@ -13,6 +14,7 @@ class DataStoreService(context: Context) {
 
     val themeKey = stringPreferencesKey("theme")
     val setlistUsernameKey = stringPreferencesKey("setListUsername")
+    val onboardingCompletedKey = booleanPreferencesKey("onboardingCompleted")
 
     val theme: Flow<ThemeMode> = dataStore.data.map { preferences ->
         ThemeMode.valueOf(preferences[themeKey] ?: ThemeMode.SYSTEM.toString())
@@ -20,6 +22,10 @@ class DataStoreService(context: Context) {
 
     val setlistUsername: Flow<String> = dataStore.data.map { preferences ->
         preferences[setlistUsernameKey] ?: ""
+    }
+
+    val isOnboardingCompleted: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[onboardingCompletedKey] ?: false
     }
 
     suspend fun setTheme(theme: ThemeMode) {
@@ -31,6 +37,12 @@ class DataStoreService(context: Context) {
     suspend fun setSetlistUsername(username: String) {
         dataStore.edit { preferences ->
             preferences[setlistUsernameKey] = username
+        }
+    }
+
+    suspend fun setOnboardingCompleted(completed: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[onboardingCompletedKey] = completed
         }
     }
 
