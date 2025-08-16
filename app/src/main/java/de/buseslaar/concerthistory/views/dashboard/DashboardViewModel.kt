@@ -42,7 +42,7 @@ class DashboardViewModel : BaseViewModel() {
                 throw Exception("Username is missing")
             }
             lastAttendedConcerts =
-                (userName?.let { userService.getUserAttended(it).setlists }
+                (userName?.let { userService.getAllUserAttended(it).setlists }
                     ?: emptyList()).toMutableList()
         }
     }
